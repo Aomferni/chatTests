@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-header style="color: #fff"> AI备考助手 </a-layout-header>
+    <a-layout-header style="color: #fff"> Header </a-layout-header>
     <a-layout-content
       style="
         background: #fff;
@@ -12,7 +12,7 @@
     >
       <a-row>
         <a-col span="10">
-          <div style="overflow-y: scroll; height: 60vh">
+          <div style="overflow-y: scroll; height: 75vh">
             <div style="display: block; font-size: 30px; font-style: oblique">
               {{ qNum }}
             </div>
@@ -63,65 +63,69 @@
           </div>
         </a-col>
         <a-col span="14" style="background-color: #f0f2f5">
-          <a-button type="primary" size="large" @click="clickConfig"
-            >设置</a-button
-          >
-          <div style="overflow-y: scroll; height: 45vh">
-            <div v-for="item of messageList.filter((v) => v.role !== 'system')">
-              <div class="group px-4 py-3 hover:bg-slate-100 rounded-lg">
-                <div>
-                  <div class="font-bold">{{ roleAlias[item.role] }}：</div>
-                  <Copy
-                    class="invisible group-hover:visible"
-                    :content="item.content"
-                  />
-                </div>
-                <div>
-                  <div
-                    class="prose text-sm text-slate-600 leading-relaxed"
-                    v-if="item.content"
-                    v-html="md.render(item.content)"
-                  ></div>
-                  <Loding v-else />
-                </div>
+          <div id="chat" style="overflow-y: scroll; height: 50vh">
+            <a-button type="primary" size="large" @click="clickConfig"
+              >设置</a-button
+            >
+            <div
+              class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
+              v-for="item of messageList.filter((v) => v.role !== 'system')"
+            >
+              <div>
+                <div class="font-bold">{{ roleAlias[item.role] }}：</div>
+                <Copy
+                  class="invisible group-hover:visible"
+                  :content="item.content"
+                />
+              </div>
+              <div>
+                <div
+                  class="prose text-sm text-slate-600 leading-relaxed"
+                  v-if="item.content"
+                  v-html="md.render(item.content)"
+                ></div>
+                <Loding v-else />
+              </div>
+            </div>
+
+            <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
+              <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
+                请输入 API Key：
+              </div>
+              <div class="flex">
+                <input
+                  class="input"
+                  :type="isConfig ? 'password' : 'text'"
+                  :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
+                  v-model="messageContent"
+                  @keydown.enter="isTalking || sendOrSave()"
+                />
+                <a-button
+                  type="primary"
+                  size="large"
+                  :disabled="isTalking"
+                  @click="sendOrSave()"
+                >
+                  {{ isConfig ? "保存" : "发送" }}
+                </a-button>
               </div>
             </div>
           </div>
-
-          <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
-            <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
-              请输入 API Key：
-            </div>
-            <div class="flex">
-              <input
-                class="input"
-                :type="isConfig ? 'password' : 'text'"
-                :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
-                v-model="messageContent"
-                @keydown.enter="isTalking || sendOrSave()"
-              />
-              <button class="btn" :disabled="isTalking" @click="sendOrSave()">
-                {{ isConfig ? "保存" : "发送" }}
-              </button>
-            </div>
+          <div style="overflow-y: scroll; height: 20vh">
+            <a-textarea
+              v-model:value="myNote"
+              :rows="7"
+              placeholder="记笔记是个好习惯！"
+              :maxlength="10"
+            />
           </div>
+          <a-button type="primary" size="large" ghost @click="exportNote">
+            导出
+          </a-button>
         </a-col>
       </a-row>
     </a-layout-content>
-    <a-layout-footer>
-      <a-row justify="space-between" align="middle">
-        <a-col span="20">
-          <a-textarea
-            v-model="note"
-            :autosize="{ minRows: 4, maxRows: 8 }"
-            placeholder="在此输入笔记"
-          ></a-textarea>
-        </a-col>
-        <a-col span="4" style="text-align: right">
-          <a-button type="primary" @click="exportNote">导出</a-button>
-        </a-col>
-      </a-row>
-    </a-layout-footer>
+    <a-layout-footer> Footer </a-layout-footer>
   </a-layout>
 </template>
 
@@ -176,6 +180,10 @@ const parse = ref("解析解析");
 
 const promt = ref("");
 
+const toExport = ref(false);
+
+const myNote = ref("");
+
 const optionsChange = (_e) => {
   console.log(_e.target.value);
   console.log(value.value);
@@ -215,6 +223,8 @@ const sendChatMessage = async (content: string = messageContent.value) => {
     appendLastMessageContent(error);
   } finally {
     isTalking.value = false;
+    const myDiv = document.getElementById("chat");
+    myDiv?.scrollTo(0, myDiv.scrollHeight);
   }
 };
 
@@ -313,6 +323,17 @@ const scrollToBottom = () => {
 };
 
 watch(messageList.value, () => nextTick(() => scrollToBottom()));
+
+const exportNote = () => {
+  const note = myNote.value; // 获取 myNote 数据
+  // 将数据导出为 txt 文件
+  const blob = new Blob([note], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "note.txt";
+  link.click();
+};
 </script>
 
 <style scoped>
