@@ -67,6 +67,7 @@
             >设置</a-button
           >
           <div
+            style="overflow-y: scroll; height: 75vh"
             class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
             v-for="item of messageList.filter((v) => v.role !== 'system')"
           >
