@@ -1,6 +1,8 @@
 <template>
   <a-layout>
-    <a-layout-header style="color: #fff"> Header </a-layout-header>
+    <a-layout-header style="color: #fff">
+      chatTests(aka.AI备考助手) | by AIGeniusHackers
+    </a-layout-header>
     <a-layout-content
       style="
         background: #fff;
@@ -63,7 +65,7 @@
           </div>
         </a-col>
         <a-col span="14" style="background-color: #f0f2f5">
-          <div id="chat" style="overflow-y: scroll; height: 50vh">
+          <div id="chat" style="overflow-y: scroll; height: 40vh">
             <a-button type="primary" size="large" @click="clickConfig"
               >设置</a-button
             >
@@ -87,7 +89,9 @@
                 <Loding v-else />
               </div>
             </div>
+          </div>
 
+          <div style="height: 10vh">
             <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
               <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
                 请输入 API Key：
@@ -111,6 +115,7 @@
               </div>
             </div>
           </div>
+
           <div style="overflow-y: scroll; height: 20vh">
             <a-textarea
               v-model:value="myNote"
@@ -119,13 +124,22 @@
               :maxlength="10"
             />
           </div>
-          <a-button type="primary" size="large" ghost @click="exportNote">
-            导出
-          </a-button>
+          <div style="display: flex; justify-content: right">
+            <a-button
+              type="primary"
+              size="large"
+              @click="exportNote"
+              style="width: 100%"
+            >
+              导出
+            </a-button>
+          </div>
         </a-col>
       </a-row>
     </a-layout-content>
-    <a-layout-footer> Footer </a-layout-footer>
+    <a-layout-footer>
+      本网站由AIGeniusHackers小组(DataWhale5月ChatGPT应用)，2周时间肝出(2023.5.30~2023.6.13)
+    </a-layout-footer>
   </a-layout>
 </template>
 
