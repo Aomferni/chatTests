@@ -1,0 +1,61 @@
+{
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "yarn install"
+    }
+  ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
+  "tasks": {
+    "dev": {
+      "name": "dev",
+      "command": "yarn dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
+    },
+    "build": {
+      "name": "build",
+      "command": "yarn build",
+      "runAtStart": false
+    },
+    "preview": {
+      "name": "preview",
+      "command": "yarn preview",
+      "runAtStart": false
+    },
+    "build-only": {
+      "name": "build-only",
+      "command": "yarn build-only",
+      "runAtStart": false
+    },
+    "type-check": {
+      "name": "type-check",
+      "command": "yarn type-check",
+      "runAtStart": false
+    },
+    "e:dev": {
+      "name": "e:dev",
+      "command": "yarn e:dev",
+      "runAtStart": false
+    },
+    "e:build": {
+      "name": "e:build",
+      "command": "yarn e:build",
+      "runAtStart": false
+    },
+    "ne:dev": {
+      "name": "ne:dev",
+      "command": "yarn ne:dev",
+      "runAtStart": false
+    },
+    "ne:build": {
+      "name": "ne:build",
+      "command": "yarn ne:build",
+      "runAtStart": false
+    }
+  }
+}

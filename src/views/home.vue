@@ -16,31 +16,31 @@
         <a-col span="10">
           <div style="overflow-y: scroll; height: 75vh">
             <div style="display: block; font-size: 30px; font-style: oblique">
-              {{ qNum }}
+              No.{{ qNum }}
             </div>
             <div style="display: block; font-size: 20px">
-              题目：{{ qTitle }}
+              题目：{{ globleQuestion.question }}
             </div>
             <a-radio-group v-model:value="value" @change="optionsChange">
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="1"
-                >A. {{ qOptions.A }}</a-radio
+                >A. {{ globleQuestion.A }}</a-radio
               >
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="2"
-                >B. {{ qOptions.B }}</a-radio
+                >B. {{ globleQuestion.B }}</a-radio
               >
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="3"
-                >C. {{ qOptions.C }}</a-radio
+                >C. {{ globleQuestion.C }}</a-radio
               >
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="4"
-                >D. {{ qOptions.D }}</a-radio
+                >D. {{ globleQuestion.D }}</a-radio
               >
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
@@ -48,7 +48,9 @@
                 <a-button type="primary" size="large" @click="seeTheParse"
                   >提交答案</a-button
                 >
-                <a-button type="primary" size="large">继续出题</a-button>
+                <a-button type="primary" size="large" @click="updateQuestion"
+                  >继续出题</a-button
+                >
               </a-space>
             </div>
             <div style="margin-top: 20px">
@@ -62,7 +64,7 @@
                     >关闭</a-button
                   >
                 </template>
-                <p>{{ parse }}</p>
+                <p>{{ globleQuestion.analyze }}</p>
               </a-card>
             </div>
           </div>
@@ -148,7 +150,7 @@
 
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
-import { ref, watch, nextTick, onMounted } from "vue";
+import { ref, watch, nextTick, onMounted, reactive } from "vue";
 import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
@@ -183,29 +185,14 @@ const messageList = ref<ChatMessage[]>([
 ]);
 
 const value = ref(1);
-const qNum = ref("No.1");
-const qTitle = ref("以下关于数据流图基本加工的叙述中，不正确的是（ ）。");
-const qOptions = {
-  A: "对每一个基本加工，必须有一个加工规格说明",
-  B: "加工规格说明必须描述把输入数据流变换为输出数据流的加工规则",
-  C: "加工规格说明需要给出实现加工的细节",
-  D: "决策树、决策表可以用来表示加工规格说明",
-};
-const qRight = ref(2);
 const seeParse = ref(false);
-const parse = ref("解析解析");
 const isAnswerCorrect = ref(false);
-
-const promt = ref("");
-
-const toExport = ref(false);
-
 const myNote = ref("");
 
 const optionsChange = (value) => {
   console.log("value:", value.target.value);
-  console.log("qRight.value:", qRight.value);
-  if (value.target.value === qRight.value) {
+  console.log("qRight.value:", globleQuestion.value.rightIndex);
+  if (value.target.value === globleQuestion.value.rightIndex) {
     // 回答正确
     // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
     isAnswerCorrect.value = true;
@@ -215,6 +202,36 @@ const optionsChange = (value) => {
     isAnswerCorrect.value = false;
   }
 };
+
+const globleQuestion = ref({
+  question: "以下关于数据流图基本加工的叙述中，不正确的是（ ）。",
+  A: "对每一个基本加工，必须有一个加工规格说明",
+  B: "加工规格说明必须描述把输入数据流变换为输出数据流的加工规则",
+  C: "加工规格说明需要给出实现加工的细节",
+  D: "决策树、决策表可以用来表示加工规格说明",
+  rightIndex: 2,
+  analyze: "解析解析",
+});
+
+const qNum = ref(1);
+
+const updateQuestion = () => {
+  qNum.value++;
+  console.log(qNum);
+  console.log(globleQuestion);
+  globleQuestion.value = JSON.parse(jsonContent);
+  console.log(globleQuestion);
+};
+
+const jsonContent = `{
+  "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
+  "A": "模块化",
+  "B": "集中化",
+  "C": "提高模块独立性",
+  "D": "提高抽象层次",
+  "rightIndex": 2,
+  "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
+}`;
 
 const seeTheParse = () => {
   seeParse.value = true;
