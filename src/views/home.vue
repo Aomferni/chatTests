@@ -45,20 +45,23 @@
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
               <a-space>
-                <a-button type="primary" size="large">上一题</a-button>
                 <a-button type="primary" size="large" @click="seeTheParse"
-                  >查看解析</a-button
+                  >提交答案</a-button
                 >
-                <a-button type="primary" size="large">下一题</a-button>
+                <a-button type="primary" size="large">继续出题</a-button>
               </a-space>
             </div>
             <div style="margin-top: 20px">
-              <a-card v-if="seeParse" title="解析" style="width: 80%">
-                <template #extra
-                  ><a-button type="primary" size="small" @click="closeParse"
+              <a-card
+                v-if="seeParse"
+                :title="isAnswerCorrect ? '回答正确！' : '再接再历'"
+                style="width: 80%"
+              >
+                <template #extra>
+                  <a-button type="primary" size="small" @click="closeParse"
                     >关闭</a-button
-                  ></template
-                >
+                  >
+                </template>
                 <p>{{ parse }}</p>
               </a-card>
             </div>
@@ -188,9 +191,10 @@ const qOptions = {
   C: "加工规格说明需要给出实现加工的细节",
   D: "决策树、决策表可以用来表示加工规格说明",
 };
-const qRight = ref(1);
+const qRight = ref(2);
 const seeParse = ref(false);
 const parse = ref("解析解析");
+const isAnswerCorrect = ref(false);
 
 const promt = ref("");
 
@@ -198,10 +202,18 @@ const toExport = ref(false);
 
 const myNote = ref("");
 
-const optionsChange = (_e) => {
-  console.log(_e.target.value);
-  console.log(value.value);
-  console.log(qRight.value);
+const optionsChange = (value) => {
+  console.log("value:", value.target.value);
+  console.log("qRight.value:", qRight.value);
+  if (value.target.value === qRight.value) {
+    // 回答正确
+    // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
+    isAnswerCorrect.value = true;
+  } else {
+    // 回答错误
+    // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
+    isAnswerCorrect.value = false;
+  }
 };
 
 const seeTheParse = () => {
