@@ -12,7 +12,7 @@
     >
       <a-row>
         <a-col span="10">
-          <div style="overflow-y: scroll; height: 75vh">
+          <div style="overflow-y: scroll; height: 60vh">
             <div style="display: block; font-size: 30px; font-style: oblique">
               {{ qNum }}
             </div>
@@ -66,24 +66,25 @@
           <a-button type="primary" size="large" @click="clickConfig"
             >设置</a-button
           >
-          <div
-            class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
-            v-for="item of messageList.filter((v) => v.role !== 'system')"
-          >
-            <div>
-              <div class="font-bold">{{ roleAlias[item.role] }}：</div>
-              <Copy
-                class="invisible group-hover:visible"
-                :content="item.content"
-              />
-            </div>
-            <div>
-              <div
-                class="prose text-sm text-slate-600 leading-relaxed"
-                v-if="item.content"
-                v-html="md.render(item.content)"
-              ></div>
-              <Loding v-else />
+          <div style="overflow-y: scroll; height: 45vh">
+            <div v-for="item of messageList.filter((v) => v.role !== 'system')">
+              <div class="group px-4 py-3 hover:bg-slate-100 rounded-lg">
+                <div>
+                  <div class="font-bold">{{ roleAlias[item.role] }}：</div>
+                  <Copy
+                    class="invisible group-hover:visible"
+                    :content="item.content"
+                  />
+                </div>
+                <div>
+                  <div
+                    class="prose text-sm text-slate-600 leading-relaxed"
+                    v-if="item.content"
+                    v-html="md.render(item.content)"
+                  ></div>
+                  <Loding v-else />
+                </div>
+              </div>
             </div>
           </div>
 
