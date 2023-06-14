@@ -151,7 +151,7 @@
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
 import { ref, watch, nextTick, onMounted, reactive } from "vue";
-import { chat } from "@/libs/gpt";
+import { chat, getQuestion } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
@@ -217,8 +217,7 @@ const qNum = ref(1);
 
 const updateQuestion = () => {
   qNum.value++;
-  console.log(qNum);
-  console.log(globleQuestion);
+  nextQuestion();
   globleQuestion.value = JSON.parse(jsonContent);
   console.log(globleQuestion);
 };
@@ -246,6 +245,21 @@ onMounted(() => {
     switchConfigStatus();
   }
 });
+
+const nextQuestion = async () => {
+  console.log("next question");
+  try {
+    const { body, status } = await getQuestion(getAPIKey());
+    console.log("Response status:", status);
+    console.log("Response body:", body);
+    if (body) {
+      console.log(body);
+      // Handle the result here
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 const sendChatMessage = async (content: string = messageContent.value) => {
   try {
