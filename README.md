@@ -3,7 +3,7 @@
 目前网站通过 Vue3 + Typescript + Tailwind CSS 框架，调用openAI GPT3.5模型 API，
 实现随机出单选题和连续对话辅导，可在网页上直接记录纯文本笔记并导出。
 
-PS：需设置自己可用的OpenAI Key，仅建议PC端使用
+PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
 
 体验网站：https://x3dsk4-5173.csb.app/ (如打不开，可在文档中留言)
 
