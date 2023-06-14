@@ -48,6 +48,7 @@
                 <a-button type="primary" size="large" @click="seeTheParse"
                   >提交答案</a-button
                 >
+                <!-- :disabled="true" -->
                 <a-button type="primary" size="large" @click="updateQuestion"
                   >继续出题</a-button
                 >
@@ -151,7 +152,7 @@
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
 import { ref, watch, nextTick, onMounted, reactive } from "vue";
-import { chat, getQuestion } from "@/libs/gpt";
+import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
@@ -212,14 +213,18 @@ const globleQuestion = ref({
   rightIndex: 2,
   analyze: "解析解析",
 });
+// 题目标题累加器
+var accumulateQuestion = "";
+// 返回出题信息
+var questionInfo = "";
 
 const qNum = ref(1);
 
 const updateQuestion = () => {
   qNum.value++;
   nextQuestion();
-  globleQuestion.value = JSON.parse(jsonContent);
-  console.log(globleQuestion);
+  // globleQuestion.value = JSON.parse(jsonContent);
+  // console.log(globleQuestion);
 };
 
 const jsonContent = `{
@@ -248,16 +253,67 @@ onMounted(() => {
 
 const nextQuestion = async () => {
   console.log("next question");
+  // try {
+  //   const { body, status } = await getQuestion(getAPIKey());
+  //   console.log("Response status:", status);
+  //   console.log("Response body:", body);
+  //   if (body) {
+  //     console.log(body);
+  //     // Handle the result here
+  //   }
+  // } catch (error) {
+  //   console.error("Error:", error);
+  // }
+  questionInfo = "";
+  accumulateQuestion += globleQuestion._value.question;
+  console.log("累加器：" + accumulateQuestion);
+  const tmpMessageList = ref<ChatMessage[]>([
+    {
+      role: "system",
+      content: `你是一个备考专家，需要为用户提供出题服务，并排除用###符号分割的题干。
+          每个题目都是出自软件设计相关的题目，需要有以下几个要素：
+          1. 题干；
+          2. A/B/C/D四个选项；
+          3. 正确选项；
+          4. 解析，不超过200个词；
+          以JSON格式提供你的输出，包含以下键：question(题干)，A/B/C/D(4个选项)，rightIndex(正确选项)，analyze(解析)
+
+          举例输出JSON 如下：
+          {
+          "question":"以下关于数据流图基本加工的叙述中，不正确的是（ ）。",
+          "A":"对每一个基本加工，必须有一个加工规格说明",
+          "B":"加工规格说明必须描述把输入数据流变换为输出数据流的加工规则",
+          "C":"加工规格说明需要给出实现加工的细节",
+          "D":"决策树、决策表可以用来表示加工规格说明",
+          "rightIndex":1,
+          "analyze":"解析解析"
+          }`,
+    },
+    {
+      role: "user",
+      content: `请随机给出一个软件设计的题目。###` + accumulateQuestion + `###`,
+    },
+  ]);
   try {
-    const { body, status } = await getQuestion(getAPIKey());
-    console.log("Response status:", status);
-    console.log("Response body:", body);
+    // if (messageList.value.length === 2) {
+    //   messageList.value.pop();
+    // }
+    // messageList.value.push({ role: "user", content });
+    // clearMessageContent();
+    // messageList.value.push({ role: "assistant", content: "" });
+
+    const { body, status } = await chat(tmpMessageList.value, getAPIKey());
     if (body) {
-      console.log(body);
-      // Handle the result here
+      const reader = body.getReader();
+      // await readStream(reader, status);
+      await readStream2Question(reader, status);
     }
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (error: any) {
+    appendLastMessageContent(error);
+  } finally {
+    console.log("appendQuestionInfo res:" + questionInfo);
+    // 进行转换
+    globleQuestion.value = JSON.parse(questionInfo);
   }
 };
 
@@ -323,6 +379,57 @@ const readStream = async (
       appendLastMessageContent(content);
     }
   }
+  console.log("partialLine:" + partialLine);
+};
+
+const readStream2Question = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  status: number
+) => {
+  let partialLine = "";
+  var resp = "";
+
+  while (true) {
+    // eslint-disable-next-line no-await-in-loop
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    const decodedText = decoder.decode(value, { stream: true });
+
+    if (status !== 200) {
+      const json = JSON.parse(decodedText); // start with "data: "
+      const content = json.error.message ?? decodedText;
+      //appendLastMessageContent(content);
+      questionInfo += content;
+      resp += content;
+      return;
+    }
+
+    const chunk = partialLine + decodedText;
+    const newLines = chunk.split(/\r?\n/);
+
+    partialLine = newLines.pop() ?? "";
+
+    for (const line of newLines) {
+      if (line.length === 0) continue; // ignore empty message
+      if (line.startsWith(":")) continue; // ignore sse comment message
+      if (line === "data: [DONE]") return; //
+
+      const json = JSON.parse(line.substring(6)); // start with "data: "
+      const content =
+        status === 200
+          ? json.choices[0].delta.content ?? ""
+          : json.error.message;
+      //appendLastMessageContent(content);
+      // appendQuestionInfo(content)
+      questionInfo += content;
+      console.log("questionInfo:" + questionInfo);
+      // console.log('tmp content:'+content)
+      // resp += content
+      // console.log('tmp resp:'+resp)
+    }
+  }
+  console.log("resp:" + resp);
 };
 
 const appendLastMessageContent = (content: string) =>
