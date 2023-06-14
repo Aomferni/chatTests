@@ -205,13 +205,14 @@ const optionsChange = (value) => {
 };
 
 const globleQuestion = ref({
-  question: "以下关于数据流图基本加工的叙述中，不正确的是（ ）。",
-  A: "对每一个基本加工，必须有一个加工规格说明",
-  B: "加工规格说明必须描述把输入数据流变换为输出数据流的加工规则",
-  C: "加工规格说明需要给出实现加工的细节",
-  D: "决策树、决策表可以用来表示加工规格说明",
+  question: "以下关于好的软件设计原则的叙述中，不正确的是（）。",
+  A: "模块化",
+  B: "集中化",
+  C: "提高模块独立性",
+  D: "提高抽象层次",
   rightIndex: 2,
-  analyze: "解析解析",
+  analyze:
+    "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。",
 });
 // 题目标题累加器
 var accumulateQuestion = "";
@@ -253,17 +254,7 @@ onMounted(() => {
 
 const nextQuestion = async () => {
   console.log("next question");
-  // try {
-  //   const { body, status } = await getQuestion(getAPIKey());
-  //   console.log("Response status:", status);
-  //   console.log("Response body:", body);
-  //   if (body) {
-  //     console.log(body);
-  //     // Handle the result here
-  //   }
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
+  seeParse.value = false;
   questionInfo = "";
   accumulateQuestion += globleQuestion._value.question;
   console.log("累加器：" + accumulateQuestion);
@@ -271,37 +262,34 @@ const nextQuestion = async () => {
     {
       role: "system",
       content: `你是一个备考专家，需要为用户提供出题服务，并排除用###符号分割的题干。
-          每个题目都是出自软件设计相关的题目，需要有以下几个要素：
+          每个题目需要有以下几个要素：
           1. 题干；
-          2. A/B/C/D四个选项；
-          3. 正确选项；
-          4. 解析，不超过200个词；
-          以JSON格式提供你的输出，包含以下键：question(题干)，A/B/C/D(4个选项)，rightIndex(正确选项)，analyze(解析)
+          2. A选项；
+          3. B选项；
+          4. C选项；
+          5. D选项；
+          6. 正确选项的数字表示(1代表A，2代表B，3代表C，4代表D)；
+          7. 解析，不超过200个词；
+          以JSON格式提供你的输出，包含以下键：question(题干)，A(选项内容)，B(选项内容)，C(选项内容)，D(选项内容)，rightIndex(正确选项数字)，analyze(解析)
 
           举例输出JSON 如下：
           {
-          "question":"以下关于数据流图基本加工的叙述中，不正确的是（ ）。",
-          "A":"对每一个基本加工，必须有一个加工规格说明",
-          "B":"加工规格说明必须描述把输入数据流变换为输出数据流的加工规则",
-          "C":"加工规格说明需要给出实现加工的细节",
-          "D":"决策树、决策表可以用来表示加工规格说明",
-          "rightIndex":1,
-          "analyze":"解析解析"
+            "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
+            "A": "模块化",
+            "B": "集中化",
+            "C": "提高模块独立性",
+            "D": "提高抽象层次",
+            "rightIndex": 2,
+            "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
           }`,
     },
     {
       role: "user",
-      content: `请随机给出一个软件设计的题目。###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个软件设计的题目。排除 ###` + accumulateQuestion + `###`,
     },
   ]);
   try {
-    // if (messageList.value.length === 2) {
-    //   messageList.value.pop();
-    // }
-    // messageList.value.push({ role: "user", content });
-    // clearMessageContent();
-    // messageList.value.push({ role: "assistant", content: "" });
-
     const { body, status } = await chat(tmpMessageList.value, getAPIKey());
     if (body) {
       const reader = body.getReader();
