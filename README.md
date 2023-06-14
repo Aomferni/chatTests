@@ -9,7 +9,7 @@ PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
 
 项目源代码：https://github.com/Aomferni/chatTests
 
-查看飞书文档，体验更佳：https://hk4llw3wld.feishu.cn/docx/IeoQdvZcQo51Yzx8oJIcHSjqnyg
+项目更多详情请查看飞书文档：https://hk4llw3wld.feishu.cn/docx/IeoQdvZcQo51Yzx8oJIcHSjqnyg
 
 ![preview](img/preview.gif)
 
@@ -19,10 +19,8 @@ PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
   搭建通过确定的题目探索边界搭建知识框架的学习平台，提高理论知识学习效率；
   让用户掌控考试，利用考试提升个人对领域的理解，而不是被考试掌控
 
-在开始之前，请确保您已正确安装 Node.js 运行时环境。如果您还没有安装 Node.js，请 [点击这里下载](https://nodejs.org/zh-cn/)。
-
-使用 ChatGPT 需要先申请 API Key，已注册但还没有 API Key 的用户可以 [前往这里生成](https://platform.openai.com/account/api-keys)。
-
+## 自部署指南
+推荐直接fork到自己的仓库，使用codeSandBox进行自动部署。
 
 
 ## 许可证
