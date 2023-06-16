@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-header style="color: #fff">
-      chatTests(aka.AI备考助手) | by AIGeniusHackers
+      chatTests(aka.AI备考助手) - by AIGeniusHackers
     </a-layout-header>
     <a-layout-content
       style="
@@ -255,7 +255,7 @@ const nextQuestion = async () => {
   console.log("next question");
   seeParse.value = false;
   questionInfo = "";
-  accumulateQuestion += globleQuestion._value.question;
+  accumulateQuestion += globleQuestion.value.question;
   console.log("累加器：" + accumulateQuestion);
   const tmpMessageList = ref<ChatMessage[]>([
     {
