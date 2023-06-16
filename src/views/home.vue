@@ -127,7 +127,6 @@
               v-model:value="myNote"
               :rows="7"
               placeholder="记笔记是个好习惯！"
-              :maxlength="10"
             />
           </div>
           <div style="display: flex; justify-content: right">
