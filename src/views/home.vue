@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-header style="color: #fff">
-      chatTests(aka.AI备考助手) | by AIGeniusHackers
+      chatTests(aka.AI备考助手) - by AIGeniusHackers
     </a-layout-header>
     <a-layout-content
       style="
