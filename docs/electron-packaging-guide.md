@@ -8,7 +8,7 @@
 
 ```bash
 yarn e:dev    # 开发调试
-yarn e:build  # 打包
+yarn e:build  # 打包,需要在bash下执行，配置代理下载electron构建工具
 ```
 
 或者

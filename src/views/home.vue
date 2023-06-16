@@ -189,7 +189,7 @@ const seeParse = ref(false);
 const isAnswerCorrect = ref(false);
 const myNote = ref("");
 
-const optionsChange = (value) => {
+const optionsChange = (value: any) => {
   console.log("value:", value.target.value);
   console.log("qRight.value:", globleQuestion.value.rightIndex);
   if (value.target.value === globleQuestion.value.rightIndex) {
@@ -255,7 +255,7 @@ const nextQuestion = async () => {
   console.log("next question");
   seeParse.value = false;
   questionInfo = "";
-  accumulateQuestion += globleQuestion._value.question;
+  accumulateQuestion += globleQuestion.value.question;
   console.log("累加器：" + accumulateQuestion);
   const tmpMessageList = ref<ChatMessage[]>([
     {
