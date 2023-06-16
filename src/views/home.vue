@@ -189,7 +189,7 @@ const seeParse = ref(false);
 const isAnswerCorrect = ref(false);
 const myNote = ref("");
 
-const optionsChange = (value) => {
+const optionsChange = (value: any) => {
   console.log("value:", value.target.value);
   console.log("qRight.value:", globleQuestion.value.rightIndex);
   if (value.target.value === globleQuestion.value.rightIndex) {

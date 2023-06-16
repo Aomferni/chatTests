@@ -1,5 +1,5 @@
-appId: com.chatgpt.app
-productName: ChatGPT
+appId: com.chattest.app
+productName: ChatTests
 directories:
   output: ../electron-dist
 mac:
