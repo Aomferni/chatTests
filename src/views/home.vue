@@ -72,9 +72,26 @@
         </a-col>
         <a-col span="14" style="background-color: #f0f2f5">
           <div id="chat" style="overflow-y: scroll; height: 40vh">
-            <a-button type="primary" size="large" @click="clickConfig"
-              >设置</a-button
-            >
+            <a-collapse>
+              <a-collapse-panel key="1" header="设置" >
+                <div class="flex">
+                <input
+                  class="input"
+                  :type="'password'"
+                  :placeholder="'请输入 API Key：sk-xxxxxxxxxx' "
+                  v-model="apiKey"
+                  @keydown.enter="save()"
+                />
+                <a-button
+                  type="primary"
+                  size="large"
+                  @click="save()"
+                >
+                保存
+                </a-button>
+              </div>
+              </a-collapse-panel>
+            </a-collapse>
             <div
               class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
               v-for="item of messageList.filter((v) => v.role !== 'system')"
@@ -99,24 +116,21 @@
 
           <div style="height: 10vh">
             <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
-              <div class="-mt-2 mb-2 text-sm text-gray-500" v-if="isConfig">
-                请输入 API Key：
-              </div>
               <div class="flex">
                 <input
                   class="input"
-                  :type="isConfig ? 'password' : 'text'"
-                  :placeholder="isConfig ? 'sk-xxxxxxxxxx' : '请输入'"
+                  :type="'text'"
+                  :placeholder="'请输入'"
                   v-model="messageContent"
-                  @keydown.enter="isTalking || sendOrSave()"
+                  @keydown.enter="isTalking || send()"
                 />
                 <a-button
                   type="primary"
                   size="large"
                   :disabled="isTalking"
-                  @click="sendOrSave()"
+                  @click="send()"
                 >
-                  {{ isConfig ? "保存" : "发送" }}
+                  发送
                 </a-button>
               </div>
             </div>
@@ -157,10 +171,10 @@ import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
 import { md } from "@/libs/markdown";
 
-let apiKey = "";
-let isConfig = ref(true);
+
 let isTalking = ref(false);
 let messageContent = ref("");
+let apiKey = ref("");
 const chatListDom = ref<HTMLDivElement>();
 const decoder = new TextDecoder("utf-8");
 const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
@@ -246,9 +260,7 @@ const closeParse = () => {
 };
 
 onMounted(() => {
-  if (getAPIKey()) {
-    switchConfigStatus();
-  }
+  getAPIKey()
 });
 
 const nextQuestion = async () => {
@@ -364,6 +376,8 @@ const readStream = async (
           ? json.choices[0].delta.content ?? ""
           : json.error.message;
       appendLastMessageContent(content);
+      const myDiv = document.getElementById("chat");
+      myDiv?.scrollTo(0, myDiv.scrollHeight);
     }
   }
   console.log("partialLine:" + partialLine);
@@ -422,26 +436,16 @@ const readStream2Question = async (
 const appendLastMessageContent = (content: string) =>
   (messageList.value[messageList.value.length - 1].content += content);
 
-const sendOrSave = () => {
-  if (!messageContent.value.length) return;
-  if (isConfig.value) {
-    if (saveAPIKey(messageContent.value.trim())) {
-      switchConfigStatus();
-    }
-    clearMessageContent();
-  } else {
-    sendChatMessage();
+const save = () => {
+  if (saveAPIKey(apiKey.value.trim())) {
   }
 };
 
-const clickConfig = () => {
-  if (!isConfig.value) {
-    messageContent.value = getAPIKey();
-  } else {
-    clearMessageContent();
-  }
-  switchConfigStatus();
+const send = () => {
+  if (!messageContent.value.length) return;
+  sendChatMessage();
 };
+
 
 const getSecretKey = () => "lianginx";
 
@@ -456,15 +460,14 @@ const saveAPIKey = (apiKey: string) => {
 };
 
 const getAPIKey = () => {
-  if (apiKey) return apiKey;
   const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  apiKey = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
+  const apiKey_from_storage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
     cryptoJS.enc.Utf8
   );
-  return apiKey;
+  apiKey.value = apiKey_from_storage;
+  return apiKey_from_storage;
 };
 
-const switchConfigStatus = () => (isConfig.value = !isConfig.value);
 
 const clearMessageContent = () => (messageContent.value = "");
 
