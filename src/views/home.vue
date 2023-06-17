@@ -3,15 +3,13 @@
     <a-layout-header style="color: #fff">
       chatTests(aka.AI备考助手) - by AIGeniusHackers
     </a-layout-header>
-    <a-layout-content
-      style="
+    <a-layout-content style="
         background: #fff;
         padding: 24px;
         margin: 24px;
         minheight: 100%;
         height: 80vh;
-      "
-    >
+      ">
       <a-row>
         <a-col span="10">
           <div style="overflow-y: scroll; height: 75vh">
@@ -22,48 +20,26 @@
               题目：{{ globleQuestion.question }}
             </div>
             <a-radio-group v-model:value="value" @change="optionsChange">
-              <a-radio
-                style="display: block; font-size: 17px; margin-top: 10px"
-                :value="1"
-                >A. {{ globleQuestion.A }}</a-radio
-              >
-              <a-radio
-                style="display: block; font-size: 17px; margin-top: 10px"
-                :value="2"
-                >B. {{ globleQuestion.B }}</a-radio
-              >
-              <a-radio
-                style="display: block; font-size: 17px; margin-top: 10px"
-                :value="3"
-                >C. {{ globleQuestion.C }}</a-radio
-              >
-              <a-radio
-                style="display: block; font-size: 17px; margin-top: 10px"
-                :value="4"
-                >D. {{ globleQuestion.D }}</a-radio
-              >
+              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="1">A. {{ globleQuestion.A
+              }}</a-radio>
+              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="2">B. {{ globleQuestion.B
+              }}</a-radio>
+              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="3">C. {{ globleQuestion.C
+              }}</a-radio>
+              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="4">D. {{ globleQuestion.D
+              }}</a-radio>
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
               <a-space>
-                <a-button type="primary" size="large" @click="seeTheParse"
-                  >提交答案</a-button
-                >
+                <a-button type="primary" size="large" @click="seeTheParse">提交答案</a-button>
                 <!-- :disabled="true" -->
-                <a-button type="primary" size="large" @click="updateQuestion"
-                  >继续出题</a-button
-                >
+                <a-button type="primary" size="large" @click="updateQuestion">继续出题</a-button>
               </a-space>
             </div>
             <div style="margin-top: 20px">
-              <a-card
-                v-if="seeParse"
-                :title="isAnswerCorrect ? '回答正确！' : '再接再历'"
-                style="width: 80%"
-              >
+              <a-card v-if="seeParse" :title="isAnswerCorrect ? '回答正确！' : '再接再历'" style="width: 80%">
                 <template #extra>
-                  <a-button type="primary" size="small" @click="closeParse"
-                    >关闭</a-button
-                  >
+                  <a-button type="primary" size="small" @click="closeParse">关闭</a-button>
                 </template>
                 <p>{{ globleQuestion.analyze }}</p>
               </a-card>
@@ -73,42 +49,29 @@
         <a-col span="14" style="background-color: #f0f2f5">
           <div id="chat" style="overflow-y: scroll; height: 40vh">
             <a-collapse>
-              <a-collapse-panel key="1" header="设置" >
+              <a-collapse-panel key="1" header="设置">
                 <div class="flex">
-                <input
-                  class="input"
-                  :type="'password'"
-                  :placeholder="'请输入 API Key：sk-xxxxxxxxxx' "
-                  v-model="apiKey"
-                  @keydown.enter="save()"
-                />
-                <a-button
-                  type="primary"
-                  size="large"
-                  @click="save()"
-                >
-                保存
-                </a-button>
-              </div>
+                  <input class="input" :type="'password'" :placeholder="'请输入 API Key：sk-xxxxxxxxxx'" v-model="apiKey"
+                    @keydown.enter="save()" />
+                  <a-button type="primary" size="large" @click="save()">
+                    保存
+                  </a-button>
+                </div>
+                <a-radio-group v-model:value="type" @change="changeType">
+                  <a-radio-button value="zaiwen">在问</a-radio-button>
+                  <a-radio-button value="OpenAI">OpenAI</a-radio-button>
+                </a-radio-group>
               </a-collapse-panel>
             </a-collapse>
-            <div
-              class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
-              v-for="item of messageList.filter((v) => v.role !== 'system')"
-            >
+            <div class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
+              v-for="item of messageList.filter((v) => v.role !== 'system')">
               <div>
                 <div class="font-bold">{{ roleAlias[item.role] }}：</div>
-                <Copy
-                  class="invisible group-hover:visible"
-                  :content="item.content"
-                />
+                <Copy class="invisible group-hover:visible" :content="item.content" />
               </div>
               <div>
-                <div
-                  class="prose text-sm text-slate-600 leading-relaxed"
-                  v-if="item.content"
-                  v-html="md.render(item.content)"
-                ></div>
+                <div class="prose text-sm text-slate-600 leading-relaxed" v-if="item.content"
+                  v-html="md.render(item.content)"></div>
                 <Loding v-else />
               </div>
             </div>
@@ -117,19 +80,9 @@
           <div style="height: 10vh">
             <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
               <div class="flex">
-                <input
-                  class="input"
-                  :type="'text'"
-                  :placeholder="'请输入'"
-                  v-model="messageContent"
-                  @keydown.enter="isTalking || send()"
-                />
-                <a-button
-                  type="primary"
-                  size="large"
-                  :disabled="isTalking"
-                  @click="send()"
-                >
+                <input class="input" :type="'text'" :placeholder="'请输入'" v-model="messageContent"
+                  @keydown.enter="isTalking || send()" />
+                <a-button type="primary" size="large" :disabled="isTalking" @click="send()">
                   发送
                 </a-button>
               </div>
@@ -137,19 +90,10 @@
           </div>
 
           <div style="overflow-y: scroll; height: 20vh">
-            <a-textarea
-              v-model:value="myNote"
-              :rows="7"
-              placeholder="记笔记是个好习惯！"
-            />
+            <a-textarea v-model:value="myNote" :rows="7" placeholder="记笔记是个好习惯！" />
           </div>
           <div style="display: flex; justify-content: right">
-            <a-button
-              type="primary"
-              size="large"
-              @click="exportNote"
-              style="width: 100%"
-            >
+            <a-button type="primary" size="large" @click="exportNote" style="width: 100%">
               导出
             </a-button>
           </div>
@@ -174,8 +118,8 @@ import { md } from "@/libs/markdown";
 
 let isTalking = ref(false);
 let messageContent = ref("");
+let type = ref("OpenAI");
 let apiKey = ref("");
-const chatListDom = ref<HTMLDivElement>();
 const decoder = new TextDecoder("utf-8");
 const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
 const messageList = ref<ChatMessage[]>([
@@ -215,6 +159,10 @@ const optionsChange = (value: any) => {
     // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
     isAnswerCorrect.value = false;
   }
+};
+
+const changeType = (value: any) => {
+  localStorage.setItem("type", type.value);
 };
 
 const globleQuestion = ref({
@@ -335,8 +283,7 @@ const sendChatMessage = async (content: string = messageContent.value) => {
     appendLastMessageContent(error);
   } finally {
     isTalking.value = false;
-    const myDiv = document.getElementById("chat");
-    myDiv?.scrollTo(0, myDiv.scrollHeight);
+    scrollToBottom();
   }
 };
 
@@ -352,6 +299,7 @@ const readStream = async (
     if (done) break;
 
     const decodedText = decoder.decode(value, { stream: true });
+    // console.log(decodedText)
 
     if (status !== 200) {
       const json = JSON.parse(decodedText); // start with "data: "
@@ -360,24 +308,33 @@ const readStream = async (
       return;
     }
 
-    const chunk = partialLine + decodedText;
-    const newLines = chunk.split(/\r?\n/);
 
-    partialLine = newLines.pop() ?? "";
+    if (type.value === 'zaiwen') {
+      // for (const line of newLines) {
+      //   // if (line.length === 0) continue; // ignore empty message
+      //   appendLastMessageContent(line);
+      //   scrollToBottom();
+      // }
+      appendLastMessageContent(decodedText);
+      scrollToBottom();
 
-    for (const line of newLines) {
-      if (line.length === 0) continue; // ignore empty message
-      if (line.startsWith(":")) continue; // ignore sse comment message
-      if (line === "data: [DONE]") return; //
+    } else {
+      const chunk = partialLine + decodedText;
+      const newLines = chunk.split(/\r?\n/);
+      partialLine = newLines.pop() ?? "";
+      for (const line of newLines) {
+        if (line.length === 0) continue; // ignore empty message
+        if (line.startsWith(":")) continue; // ignore sse comment message
+        if (line === "data: [DONE]") return; //
 
-      const json = JSON.parse(line.substring(6)); // start with "data: "
-      const content =
-        status === 200
-          ? json.choices[0].delta.content ?? ""
-          : json.error.message;
-      appendLastMessageContent(content);
-      const myDiv = document.getElementById("chat");
-      myDiv?.scrollTo(0, myDiv.scrollHeight);
+        const json = JSON.parse(line.substring(6)); // start with "data: "
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
+        appendLastMessageContent(content);
+        scrollToBottom();
+      }
     }
   }
   console.log("partialLine:" + partialLine);
@@ -406,28 +363,35 @@ const readStream2Question = async (
       return;
     }
 
-    const chunk = partialLine + decodedText;
-    const newLines = chunk.split(/\r?\n/);
 
-    partialLine = newLines.pop() ?? "";
 
-    for (const line of newLines) {
-      if (line.length === 0) continue; // ignore empty message
-      if (line.startsWith(":")) continue; // ignore sse comment message
-      if (line === "data: [DONE]") return; //
+    if (type.value === 'zaiwen') {
+      // for (const line of newLines) {
+      //   questionInfo += line;
+      // }
+      questionInfo += decodedText;
+    } else {
+      const chunk = partialLine + decodedText;
+      const newLines = chunk.split(/\r?\n/);
+      partialLine = newLines.pop() ?? "";
+      for (const line of newLines) {
+        if (line.length === 0) continue; // ignore empty message
+        if (line.startsWith(":")) continue; // ignore sse comment message
+        if (line === "data: [DONE]") return; //
 
-      const json = JSON.parse(line.substring(6)); // start with "data: "
-      const content =
-        status === 200
-          ? json.choices[0].delta.content ?? ""
-          : json.error.message;
-      //appendLastMessageContent(content);
-      // appendQuestionInfo(content)
-      questionInfo += content;
-      console.log("questionInfo:" + questionInfo);
-      // console.log('tmp content:'+content)
-      // resp += content
-      // console.log('tmp resp:'+resp)
+        const json = JSON.parse(line.substring(6)); // start with "data: "
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
+        //appendLastMessageContent(content);
+        // appendQuestionInfo(content)
+        questionInfo += content;
+        console.log("questionInfo:" + questionInfo);
+        // console.log('tmp content:'+content)
+        // resp += content
+        // console.log('tmp resp:'+resp)
+      }
     }
   }
   console.log("resp:" + resp);
@@ -461,19 +425,21 @@ const saveAPIKey = (apiKey: string) => {
 
 const getAPIKey = () => {
   const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  const apiKey_from_storage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
+  const apiKeyFromStorage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
     cryptoJS.enc.Utf8
   );
-  apiKey.value = apiKey_from_storage;
-  return apiKey_from_storage;
+  apiKey.value = apiKeyFromStorage;
+  const typeFromStorage = localStorage.getItem("type") ?? "zaiwen";
+  type.value = typeFromStorage;
+  return apiKeyFromStorage;
 };
 
 
 const clearMessageContent = () => (messageContent.value = "");
 
 const scrollToBottom = () => {
-  if (!chatListDom.value) return;
-  scrollTo(0, chatListDom.value.scrollHeight);
+  const myDiv = document.getElementById("chat");
+  myDiv?.scrollTo(0, myDiv.scrollHeight);
 };
 
 watch(messageList.value, () => nextTick(() => scrollToBottom()));
