@@ -7,5 +7,6 @@
 ```bash
 yarn     # 安装依赖
 yarn dev  # 开发调试
+yarn build  # 打包
 ```
 
