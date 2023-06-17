@@ -5,7 +5,8 @@
 
 PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
 
-体验网站：https://x3dsk4-5173.csb.app/ (如打不开，可在文档中留言)
+体验网站1：https://yfor-chattests.hf.space/ (huggingface 部署)
+体验网站2：https://x3dsk4-5173.csb.app/ (codeSandBox 部署如打不开，可在文档中留言)
 
 项目源代码：https://github.com/Aomferni/chatTests
 
