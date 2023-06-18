@@ -3,13 +3,15 @@
     <a-layout-header style="color: #fff">
       chatTests(aka.AI备考助手) - by AIGeniusHackers
     </a-layout-header>
-    <a-layout-content style="
+    <a-layout-content
+      style="
         background: #fff;
         padding: 24px;
         margin: 24px;
         minheight: 100%;
         height: 80vh;
-      ">
+      "
+    >
       <a-row>
         <a-col span="10">
           <div style="overflow-y: scroll; height: 75vh">
@@ -20,26 +22,48 @@
               题目：{{ globleQuestion.question }}
             </div>
             <a-radio-group v-model:value="value" @change="optionsChange">
-              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="1">A. {{ globleQuestion.A
-              }}</a-radio>
-              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="2">B. {{ globleQuestion.B
-              }}</a-radio>
-              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="3">C. {{ globleQuestion.C
-              }}</a-radio>
-              <a-radio style="display: block; font-size: 17px; margin-top: 10px" :value="4">D. {{ globleQuestion.D
-              }}</a-radio>
+              <a-radio
+                style="display: block; font-size: 17px; margin-top: 10px"
+                :value="1"
+                >A. {{ globleQuestion.A }}</a-radio
+              >
+              <a-radio
+                style="display: block; font-size: 17px; margin-top: 10px"
+                :value="2"
+                >B. {{ globleQuestion.B }}</a-radio
+              >
+              <a-radio
+                style="display: block; font-size: 17px; margin-top: 10px"
+                :value="3"
+                >C. {{ globleQuestion.C }}</a-radio
+              >
+              <a-radio
+                style="display: block; font-size: 17px; margin-top: 10px"
+                :value="4"
+                >D. {{ globleQuestion.D }}</a-radio
+              >
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
               <a-space>
-                <a-button type="primary" size="large" @click="seeTheParse">提交答案</a-button>
+                <a-button type="primary" size="large" @click="seeTheParse"
+                  >提交答案</a-button
+                >
                 <!-- :disabled="true" -->
-                <a-button type="primary" size="large" @click="updateQuestion">继续出题</a-button>
+                <a-button type="primary" size="large" @click="updateQuestion"
+                  >继续出题</a-button
+                >
               </a-space>
             </div>
             <div style="margin-top: 20px">
-              <a-card v-if="seeParse" :title="isAnswerCorrect ? '回答正确！' : '再接再历'" style="width: 80%">
+              <a-card
+                v-if="seeParse"
+                :title="isAnswerCorrect ? '回答正确！' : '再接再历'"
+                style="width: 80%"
+              >
                 <template #extra>
-                  <a-button type="primary" size="small" @click="closeParse">关闭</a-button>
+                  <a-button type="primary" size="small" @click="closeParse"
+                    >关闭</a-button
+                  >
                 </template>
                 <p>{{ globleQuestion.analyze }}</p>
               </a-card>
@@ -51,8 +75,13 @@
             <a-collapse>
               <a-collapse-panel key="1" header="设置">
                 <div class="flex">
-                  <input class="input" :type="'password'" :placeholder="'请输入 API Key：sk-xxxxxxxxxx'" v-model="apiKey"
-                    @keydown.enter="save()" />
+                  <input
+                    class="input"
+                    :type="'password'"
+                    :placeholder="'请输入 API Key：sk-xxxxxxxxxx'"
+                    v-model="apiKey"
+                    @keydown.enter="save()"
+                  />
                   <a-button type="primary" size="large" @click="save()">
                     保存
                   </a-button>
@@ -63,15 +92,23 @@
                 </a-radio-group>
               </a-collapse-panel>
             </a-collapse>
-            <div class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
-              v-for="item of messageList.filter((v) => v.role !== 'system')">
+            <div
+              class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
+              v-for="item of messageList.filter((v) => v.role !== 'system')"
+            >
               <div>
                 <div class="font-bold">{{ roleAlias[item.role] }}：</div>
-                <Copy class="invisible group-hover:visible" :content="item.content" />
+                <Copy
+                  class="invisible group-hover:visible"
+                  :content="item.content"
+                />
               </div>
               <div>
-                <div class="prose text-sm text-slate-600 leading-relaxed" v-if="item.content"
-                  v-html="md.render(item.content)"></div>
+                <div
+                  class="prose text-sm text-slate-600 leading-relaxed"
+                  v-if="item.content"
+                  v-html="md.render(item.content)"
+                ></div>
                 <Loding v-else />
               </div>
             </div>
@@ -80,9 +117,19 @@
           <div style="height: 10vh">
             <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
               <div class="flex">
-                <input class="input" :type="'text'" :placeholder="'请输入'" v-model="messageContent"
-                  @keydown.enter="isTalking || send()" />
-                <a-button type="primary" size="large" :disabled="isTalking" @click="send()">
+                <input
+                  class="input"
+                  :type="'text'"
+                  :placeholder="'请输入'"
+                  v-model="messageContent"
+                  @keydown.enter="isTalking || send()"
+                />
+                <a-button
+                  type="primary"
+                  size="large"
+                  :disabled="isTalking"
+                  @click="send()"
+                >
                   发送
                 </a-button>
               </div>
@@ -90,10 +137,19 @@
           </div>
 
           <div style="overflow-y: scroll; height: 20vh">
-            <a-textarea v-model:value="myNote" :rows="7" placeholder="记笔记是个好习惯！" />
+            <a-textarea
+              v-model:value="myNote"
+              :rows="7"
+              placeholder="记笔记是个好习惯！"
+            />
           </div>
           <div style="display: flex; justify-content: right">
-            <a-button type="primary" size="large" @click="exportNote" style="width: 100%">
+            <a-button
+              type="primary"
+              size="large"
+              @click="exportNote"
+              style="width: 100%"
+            >
               导出
             </a-button>
           </div>
@@ -114,7 +170,6 @@ import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
 import { md } from "@/libs/markdown";
-
 
 let isTalking = ref(false);
 let messageContent = ref("");
@@ -148,8 +203,6 @@ const isAnswerCorrect = ref(false);
 const myNote = ref("");
 
 const optionsChange = (value: any) => {
-  console.log("value:", value.target.value);
-  console.log("qRight.value:", globleQuestion.value.rightIndex);
   if (value.target.value === globleQuestion.value.rightIndex) {
     // 回答正确
     // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
@@ -200,6 +253,18 @@ const jsonContent = `{
 }`;
 
 const seeTheParse = () => {
+  console.log("see the parse");
+  console.log(value);
+  if (value.value === globleQuestion.value.rightIndex) {
+    // 回答正确
+    // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
+    isAnswerCorrect.value = true;
+  } else {
+    // 回答错误
+    // 在这里添加你的提示逻辑，例如显示一个提示框或修改相关的状态
+    isAnswerCorrect.value = false;
+  }
+
   seeParse.value = true;
 };
 
@@ -208,7 +273,7 @@ const closeParse = () => {
 };
 
 onMounted(() => {
-  getAPIKey()
+  getAPIKey();
 });
 
 const nextQuestion = async () => {
@@ -220,7 +285,7 @@ const nextQuestion = async () => {
   const tmpMessageList = ref<ChatMessage[]>([
     {
       role: "system",
-      content: `你是一个备考专家，需要为用户提供出题服务，并排除用###符号分割的题干。
+      content: `你是一个备考专家，需要为用户提供出单选题的服务，并排除用###符号分割的题干。
           每个题目需要有以下几个要素：
           1. 题干；
           2. A选项；
@@ -228,7 +293,7 @@ const nextQuestion = async () => {
           4. C选项；
           5. D选项；
           6. 正确选项的数字表示(1代表A，2代表B，3代表C，4代表D)；
-          7. 解析，不超过200个词；
+          7. 解析，50字以上，不超过200个词；
           以JSON格式提供你的输出，包含以下键：question(题干)，A(选项内容)，B(选项内容)，C(选项内容)，D(选项内容)，rightIndex(正确选项数字)，analyze(解析)
 
           举例输出JSON 如下：
@@ -245,7 +310,9 @@ const nextQuestion = async () => {
     {
       role: "user",
       content:
-        `请随机给出一个软件设计的题目。排除 ###` + accumulateQuestion + `###`,
+        `请随机给出一个软件设计师相关的题目，范围是面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空。排除 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -308,8 +375,7 @@ const readStream = async (
       return;
     }
 
-
-    if (type.value === 'zaiwen') {
+    if (type.value === "zaiwen") {
       // for (const line of newLines) {
       //   // if (line.length === 0) continue; // ignore empty message
       //   appendLastMessageContent(line);
@@ -317,7 +383,6 @@ const readStream = async (
       // }
       appendLastMessageContent(decodedText);
       scrollToBottom();
-
     } else {
       const chunk = partialLine + decodedText;
       const newLines = chunk.split(/\r?\n/);
@@ -363,9 +428,7 @@ const readStream2Question = async (
       return;
     }
 
-
-
-    if (type.value === 'zaiwen') {
+    if (type.value === "zaiwen") {
       // for (const line of newLines) {
       //   questionInfo += line;
       // }
@@ -410,12 +473,13 @@ const send = () => {
   sendChatMessage();
 };
 
-
 const getSecretKey = () => "lianginx";
 
 const saveAPIKey = (apiKey: string) => {
   if (apiKey.slice(0, 3) !== "sk-" || apiKey.length !== 51) {
-    alert("API Key 错误，请检查后重新输入！");
+    alert(
+      "API Key 错误，请检查后重新输入！\n如无key可尝试 在问(zaiwen.top) 渠道"
+    );
     return false;
   }
   const aesAPIKey = cryptoJS.AES.encrypt(apiKey, getSecretKey()).toString();
@@ -425,15 +489,15 @@ const saveAPIKey = (apiKey: string) => {
 
 const getAPIKey = () => {
   const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  const apiKeyFromStorage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(
-    cryptoJS.enc.Utf8
-  );
+  const apiKeyFromStorage = cryptoJS.AES.decrypt(
+    aesAPIKey,
+    getSecretKey()
+  ).toString(cryptoJS.enc.Utf8);
   apiKey.value = apiKeyFromStorage;
   const typeFromStorage = localStorage.getItem("type") ?? "zaiwen";
   type.value = typeFromStorage;
   return apiKeyFromStorage;
 };
-
 
 const clearMessageContent = () => (messageContent.value = "");
 
