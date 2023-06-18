@@ -176,7 +176,7 @@ let messageContent = ref("");
 let type = ref("OpenAI");
 let apiKey = ref("");
 const decoder = new TextDecoder("utf-8");
-const roleAlias = { user: "ME", assistant: "ChatGPT", system: "System" };
+const roleAlias = { user: "ME", assistant: "ChatTests", system: "System" };
 const messageList = ref<ChatMessage[]>([
   {
     role: "system",
