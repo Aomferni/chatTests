@@ -70,8 +70,8 @@
             </div>
           </div>
         </a-col>
-        <a-col span="14" style="background-color: #f0f2f5">
-          <div id="chat" style="overflow-y: scroll; height: 40vh">
+        <a-col span="14" style="background-color: #ffffff">
+          <div id="chat" style="overflow-y: scroll; height: 35vh; border: #000000;">
             <a-collapse>
               <a-collapse-panel key="1" header="设置">
                 <div class="flex">
@@ -136,22 +136,8 @@
             </div>
           </div>
 
-          <div style="overflow-y: scroll; height: 20vh">
-            <a-textarea
-              v-model:value="myNote"
-              :rows="7"
-              placeholder="记笔记是个好习惯！"
-            />
-          </div>
-          <div style="display: flex; justify-content: right">
-            <a-button
-              type="primary"
-              size="large"
-              @click="exportNote"
-              style="width: 100%"
-            >
-              导出
-            </a-button>
+          <div style="overflow-y: scroll; height: 30vh">
+            <div id="vditor" style="margin-top: 30px;" />
           </div>
         </a-col>
       </a-row>
@@ -164,12 +150,14 @@
 
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
-import { ref, watch, nextTick, onMounted, reactive } from "vue";
+import { ref, watch, nextTick, onMounted, reactive, computed, vShow } from "vue";
 import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
 import { md } from "@/libs/markdown";
+import Vditor from 'vditor'
+import 'vditor/dist/index.css'
 
 let isTalking = ref(false);
 let messageContent = ref("");
@@ -201,6 +189,8 @@ const value = ref(1);
 const seeParse = ref(false);
 const isAnswerCorrect = ref(false);
 const myNote = ref("");
+
+const vditor = ref<Vditor | null>(null);
 
 const optionsChange = (value: any) => {
   if (value.target.value === globleQuestion.value.rightIndex) {
@@ -274,6 +264,18 @@ const closeParse = () => {
 
 onMounted(() => {
   getAPIKey();
+  vditor.value = new Vditor('vditor', {
+    height: 220,
+    toolbarConfig: {
+      pin: true,
+    },
+    cache: {
+      enable: false,
+    },
+    after: () => {
+      vditor.value!.setValue('# 记笔记是一个好习惯')
+    }
+  })
 });
 
 const nextQuestion = async () => {
