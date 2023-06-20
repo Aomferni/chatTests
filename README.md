@@ -16,11 +16,10 @@ PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
 ![preview](img/preview.gif)
 
 内测交流群见：
-![image](https://github.com/Aomferni/chatTests/assets/28871390/7c3940fa-8f6f-4cbe-922b-6f34ac016e58)
+![image](https://github.com/Aomferni/chatTests/assets/28871390/b233e1b9-bcb3-42d0-85f8-7377dcb18027)
 
 对投入项目后续优化可带自我介绍戳：
-![image](https://github.com/Aomferni/chatTests/assets/28871390/c5eba901-45e0-4509-83c0-eed76b09f568)
-
+![image](https://github.com/Aomferni/chatTests/assets/28871390/8b3dd17d-c1b6-4883-8f42-f1b4489c9a47)
 
 ## ChatTest 项目愿景
 
