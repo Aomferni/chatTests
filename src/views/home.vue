@@ -12,8 +12,28 @@
         height: 80vh;
       "
     >
+      <a-collapse>
+                <a-collapse-panel key="1" header="设置">
+                  <div class="flex">
+                    <input
+                      class="input"
+                      :type="'password'"
+                      :placeholder="'请输入 API Key：sk-xxxxxxxxxx'"
+                      v-model="apiKey"
+                      @keydown.enter="save()"
+                    />
+                    <a-button type="primary" size="large" @click="save()">
+                      保存
+                    </a-button>
+                  </div>
+                  <a-radio-group v-model:value="type" @change="changeType">
+                    <a-radio-button value="zaiwen">在问</a-radio-button>
+                    <a-radio-button value="OpenAI">OpenAI</a-radio-button>
+                  </a-radio-group>
+                </a-collapse-panel>
+      </a-collapse>
       <a-row>
-        <a-col span="10">
+        <a-col :xs="{ span: 24}" :lg="{ span: 10 }">
           <div style="overflow-y: scroll; height: 75vh">
             <div style="display: block; font-size: 30px; font-style: oblique">
               No.{{ qNum }}
@@ -70,28 +90,9 @@
             </div>
           </div>
         </a-col>
-        <a-col span="14" style="background-color: #ffffff">
+        <a-col :xs="{ span: 24}" :lg="{ span: 14 }" style="background-color: #ffffff">
           <div id="chat" style="overflow-y: scroll; height: 35vh; border: #000000;">
-            <a-collapse>
-              <a-collapse-panel key="1" header="设置">
-                <div class="flex">
-                  <input
-                    class="input"
-                    :type="'password'"
-                    :placeholder="'请输入 API Key：sk-xxxxxxxxxx'"
-                    v-model="apiKey"
-                    @keydown.enter="save()"
-                  />
-                  <a-button type="primary" size="large" @click="save()">
-                    保存
-                  </a-button>
-                </div>
-                <a-radio-group v-model:value="type" @change="changeType">
-                  <a-radio-button value="zaiwen">在问</a-radio-button>
-                  <a-radio-button value="OpenAI">OpenAI</a-radio-button>
-                </a-radio-group>
-              </a-collapse-panel>
-            </a-collapse>
+            
             <div
               class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
               v-for="item of messageList.filter((v) => v.role !== 'system')"
