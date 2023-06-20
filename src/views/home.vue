@@ -225,8 +225,9 @@ var questionInfo = "";
 
 const qNum = ref(1);
 
+const qNumInner = ref(1);
 const updateQuestion = () => {
-  qNum.value++;
+  qNumInner.value++;
   nextQuestion();
   // globleQuestion.value = JSON.parse(jsonContent);
   // console.log(globleQuestion);
@@ -417,6 +418,7 @@ const readStream2Question = async (
   while (true) {
     // eslint-disable-next-line no-await-in-loop
     const { value, done } = await reader.read();
+    qNum.value = qNumInner.value
     if (done) break;
 
     const decodedText = decoder.decode(value, { stream: true });
@@ -435,6 +437,7 @@ const readStream2Question = async (
       //   questionInfo += line;
       // }
       questionInfo += decodedText;
+      tryRenderPartialQuestion(questionInfo)
     } else {
       const chunk = partialLine + decodedText;
       const newLines = chunk.split(/\r?\n/);
@@ -453,6 +456,7 @@ const readStream2Question = async (
         // appendQuestionInfo(content)
         questionInfo += content;
         console.log("questionInfo:" + questionInfo);
+        tryRenderPartialQuestion(questionInfo)
         // console.log('tmp content:'+content)
         // resp += content
         // console.log('tmp resp:'+resp)
@@ -460,6 +464,15 @@ const readStream2Question = async (
     }
   }
   console.log("resp:" + resp);
+};
+
+const tryRenderPartialQuestion = (questionInfo: string) => {
+  try {
+    const content = questionInfo + '"}'
+    globleQuestion.value = JSON.parse(content);
+  } catch (error: any) {
+    // do nothing
+  }
 };
 
 const appendLastMessageContent = (content: string) =>
