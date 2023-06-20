@@ -15,6 +15,13 @@ PS：需设置自己可用的OpenAI Key，目前仅建议PC端使用
 
 ![preview](img/preview.gif)
 
+内测交流群见：
+![image](https://github.com/Aomferni/chatTests/assets/28871390/7c3940fa-8f6f-4cbe-922b-6f34ac016e58)
+
+对投入项目后续优化可带自我介绍戳：
+![image](https://github.com/Aomferni/chatTests/assets/28871390/c5eba901-45e0-4509-83c0-eed76b09f568)
+
+
 ## ChatTest 项目愿景
 
   让考试和题目/问题，回归到辅助学习的核心作用上
