@@ -37,10 +37,10 @@ https://x3dsk4-5173.csb.app/#/
 ![preview](img/preview.gif)
 
 内测交流群见：
-![image](https://github.com/Aomferni/chatTests/assets/28871390/b233e1b9-bcb3-42d0-85f8-7377dcb18027)
+![image](public/ChatTests_user_group_wechat.png)
 
 对投入项目后续优化可带自我介绍戳：
-![image](https://github.com/Aomferni/chatTests/assets/28871390/8b3dd17d-c1b6-4883-8f42-f1b4489c9a47)
+![image](public/Amy_wechat.png)
 
 ## ChatTest 项目愿景
 
