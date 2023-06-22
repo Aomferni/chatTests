@@ -36,7 +36,13 @@
       ><br />
       <a-image
         :width="300"
-        :src="`https://github.com/StePhEnCuHui/StePhEnCuHui/blob/main/WechatIMG99.png?raw=true`"
+        :src="`ChatTests_user_group_wechat.png`"
+        style="border: 10px"
+      >
+      </a-image>
+      <a-image
+        :width="300"
+        :src="`Amy_wechat.png`"
         style="border: 10px"
       >
       </a-image>
