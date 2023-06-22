@@ -1,4 +1,47 @@
 <template>
+  <a-modal
+    v-model:visible="showTips"
+    title="欢迎使用GPT应用网站(ChatTests)"
+    :footer="null"
+    width="1000px"
+  >
+    <div style="font-size: 20px; text-align: center">
+      <p style="font-size: 25px">DataWhale5月模型应用hackathon TOP1</p>
+      <p style="color: red; font-size: 20px">得分：107.5/120</p>
+      <p>
+        斩获 <span style="font-size: 30px; color: blue">最佳创新奖</span> 和
+        <span style="font-size: 30px; color: blue">最佳应用奖</span>
+        两个最佳奖项！
+      </p>
+      <p style="font-style: italic">
+        让考试和题目/问题，回归到辅助学习的核心作用上搭建通过确定的题目探索边界搭建知识框架的学习平台，提高理论知识学习效率
+      </p>
+      <p style="font-size: 30px; color: coral">
+        掌控考试，利用考试提升个人对领域的理解，而不是被考试掌控
+      </p>
+      项目说明文档：<a
+        href="https://hk4llw3wld.feishu.cn/docx/IeoQdvZcQo51Yzx8oJIcHSjqnyg"
+        target="_blank"
+        >点击跳转</a
+      ><br />
+      项目详情见：<a
+        href="https://www.bilibili.com/video/BV1DP411i7mT/"
+        target="_blank"
+        >点击跳转</a
+      ><br />
+      项目答辩见：<a
+        href="https://www.bilibili.com/video/BV1eo4y1P7oX/"
+        target="_blank"
+        >点击跳转</a
+      ><br />
+      <a-image
+        :width="300"
+        :src="`https://github.com/StePhEnCuHui/StePhEnCuHui/blob/main/WechatIMG99.png?raw=true`"
+        style="border: 10px"
+      >
+      </a-image>
+    </div>
+  </a-modal>
   <a-layout>
     <a-layout-header style="color: #fff">
       chatTests(aka.AI备考助手) - by AIGeniusHackers
@@ -13,27 +56,27 @@
       "
     >
       <a-collapse>
-                <a-collapse-panel key="1" header="设置">
-                  <div class="flex">
-                    <input
-                      class="input"
-                      :type="'password'"
-                      :placeholder="'请输入 API Key：sk-xxxxxxxxxx'"
-                      v-model="apiKey"
-                      @keydown.enter="save()"
-                    />
-                    <a-button type="primary" size="large" @click="save()">
-                      保存
-                    </a-button>
-                  </div>
-                  <a-radio-group v-model:value="type" @change="changeType">
-                    <a-radio-button value="zaiwen">在问</a-radio-button>
-                    <a-radio-button value="OpenAI">OpenAI</a-radio-button>
-                  </a-radio-group>
-                </a-collapse-panel>
+        <a-collapse-panel key="1" header="设置">
+          <div class="flex">
+            <input
+              class="input"
+              :type="'password'"
+              :placeholder="'请输入 API Key：sk-xxxxxxxxxx'"
+              v-model="apiKey"
+              @keydown.enter="save()"
+            />
+            <a-button type="primary" size="large" @click="save()">
+              保存
+            </a-button>
+          </div>
+          <a-radio-group v-model:value="type" @change="changeType">
+            <a-radio-button value="zaiwen">在问</a-radio-button>
+            <a-radio-button value="OpenAI">OpenAI</a-radio-button>
+          </a-radio-group>
+        </a-collapse-panel>
       </a-collapse>
       <a-row>
-        <a-col :xs="{ span: 24}" :lg="{ span: 10 }">
+        <a-col :xs="{ span: 24 }" :lg="{ span: 10 }">
           <div style="overflow-y: scroll; height: 75vh">
             <div style="display: block; font-size: 30px; font-style: oblique">
               No.{{ qNum }}
@@ -90,9 +133,15 @@
             </div>
           </div>
         </a-col>
-        <a-col :xs="{ span: 24}" :lg="{ span: 14 }" style="background-color: #ffffff">
-          <div id="chat" style="overflow-y: scroll; height: 35vh; border: #000000;">
-            
+        <a-col
+          :xs="{ span: 24 }"
+          :lg="{ span: 14 }"
+          style="background-color: #ffffff"
+        >
+          <div
+            id="chat"
+            style="overflow-y: scroll; height: 35vh; border: #000000"
+          >
             <div
               class="group px-4 py-3 hover:bg-slate-100 rounded-lg"
               v-for="item of messageList.filter((v) => v.role !== 'system')"
@@ -116,7 +165,7 @@
           </div>
 
           <div style="height: 10vh">
-            <div class="sticky bottom-0 w-full p-6 pb-8 bg-gray-100">
+            <div class="sticky bottom-0 p-6 pb-8 bg-gray-100">
               <div class="flex">
                 <input
                   class="input"
@@ -138,7 +187,7 @@
           </div>
 
           <div style="overflow-y: scroll; height: 30vh">
-            <div id="vditor" style="margin-top: 30px;" />
+            <div id="vditor" style="margin-top: 30px" />
           </div>
         </a-col>
       </a-row>
@@ -151,14 +200,23 @@
 
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
-import { ref, watch, nextTick, onMounted, reactive, computed, vShow } from "vue";
+import {
+  ref,
+  watch,
+  nextTick,
+  onMounted,
+  reactive,
+  computed,
+  vShow,
+  h,
+} from "vue";
 import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
 import Copy from "@/components/Copy.vue";
 import { md } from "@/libs/markdown";
-import Vditor from 'vditor'
-import 'vditor/dist/index.css'
+import Vditor from "vditor";
+import "vditor/dist/index.css";
 
 let isTalking = ref(false);
 let messageContent = ref("");
@@ -192,6 +250,8 @@ const isAnswerCorrect = ref(false);
 const myNote = ref("");
 
 const vditor = ref<Vditor | null>(null);
+
+const showTips = ref(true);
 
 const optionsChange = (value: any) => {
   if (value.target.value === globleQuestion.value.rightIndex) {
@@ -266,7 +326,7 @@ const closeParse = () => {
 
 onMounted(() => {
   getAPIKey();
-  vditor.value = new Vditor('vditor', {
+  vditor.value = new Vditor("vditor", {
     height: 220,
     toolbarConfig: {
       pin: true,
@@ -275,9 +335,9 @@ onMounted(() => {
       enable: false,
     },
     after: () => {
-      vditor.value!.setValue('# 记笔记是一个好习惯')
-    }
-  })
+      vditor.value!.setValue("# 记笔记是一个好习惯");
+    },
+  });
 });
 
 const nextQuestion = async () => {
@@ -419,7 +479,7 @@ const readStream2Question = async (
   while (true) {
     // eslint-disable-next-line no-await-in-loop
     const { value, done } = await reader.read();
-    qNum.value = qNumInner.value
+    qNum.value = qNumInner.value;
     if (done) break;
 
     const decodedText = decoder.decode(value, { stream: true });
@@ -438,7 +498,7 @@ const readStream2Question = async (
       //   questionInfo += line;
       // }
       questionInfo += decodedText;
-      tryRenderPartialQuestion(questionInfo)
+      tryRenderPartialQuestion(questionInfo);
     } else {
       const chunk = partialLine + decodedText;
       const newLines = chunk.split(/\r?\n/);
@@ -457,7 +517,7 @@ const readStream2Question = async (
         // appendQuestionInfo(content)
         questionInfo += content;
         console.log("questionInfo:" + questionInfo);
-        tryRenderPartialQuestion(questionInfo)
+        tryRenderPartialQuestion(questionInfo);
         // console.log('tmp content:'+content)
         // resp += content
         // console.log('tmp resp:'+resp)
@@ -469,7 +529,7 @@ const readStream2Question = async (
 
 const tryRenderPartialQuestion = (questionInfo: string) => {
   try {
-    const content = questionInfo + '"}'
+    const content = questionInfo + '"}';
     globleQuestion.value = JSON.parse(content);
   } catch (error: any) {
     // do nothing
