@@ -40,11 +40,7 @@
         style="border: 10px"
       >
       </a-image>
-      <a-image
-        :width="300"
-        :src="`Amy_wechat.png`"
-        style="border: 10px"
-      >
+      <a-image :width="300" :src="`Amy_wechat.png`" style="border: 10px">
       </a-image>
     </div>
   </a-modal>
@@ -289,6 +285,9 @@ const globleQuestion = ref({
 var accumulateQuestion = "";
 // 返回出题信息
 var questionInfo = "";
+var learningScope = "软件设计师";
+var learningArea =
+  "面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空";
 
 const qNum = ref(1);
 
@@ -346,7 +345,7 @@ onMounted(() => {
   });
 });
 
-const nextQuestion = async () => {
+const nextQuestion_old = async () => {
   console.log("next question");
   seeParse.value = false;
   questionInfo = "";
@@ -381,6 +380,119 @@ const nextQuestion = async () => {
       role: "user",
       content:
         `请随机给出一个软件设计师相关的题目，范围是面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空。排除 ###` +
+        accumulateQuestion +
+        `###`,
+    },
+  ]);
+  try {
+    const { body, status } = await chat(tmpMessageList.value, getAPIKey());
+    if (body) {
+      const reader = body.getReader();
+      // await readStream(reader, status);
+      await readStream2Question(reader, status);
+    }
+  } catch (error: any) {
+    appendLastMessageContent(error);
+  } finally {
+    console.log("appendQuestionInfo res:" + questionInfo);
+    // 进行转换
+    globleQuestion.value = JSON.parse(questionInfo);
+  }
+};
+
+const nextQuestion = async () => {
+  console.log("next question");
+  seeParse.value = false;
+  questionInfo = "";
+  accumulateQuestion += globleQuestion.value.question;
+  console.log("累加器：" + accumulateQuestion);
+  const tmpMessageList = ref<ChatMessage[]>([
+    {
+      role: "system",
+      content: `你是一个备考专家，需要为用户提供出单选题的服务，并排除用###符号分割的题干。
+          每个题目需要有以下几个要素：
+          1. 题干；
+          2. A选项；
+          3. B选项；
+          4. C选项；
+          5. D选项；
+          6. 正确选项的数字表示(1代表A，2代表B，3代表C，4代表D)；
+          7. 解析，50字以上，不超过200个词；
+          以JSON格式提供你的输出，包含以下键：question(题干)，A(选项内容)，B(选项内容)，C(选项内容)，D(选项内容)，rightIndex(正确选项数字)，analyze(解析)
+
+          举例输出JSON 如下：
+          {
+            "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
+            "A": "模块化",
+            "B": "集中化",
+            "C": "提高模块独立性",
+            "D": "提高抽象层次",
+            "rightIndex": 2,
+            "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
+          }`,
+    },
+    {
+      role: "user",
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `。排除已经出过的题目 ###` +
+        accumulateQuestion +
+        `###`,
+    },
+  ]);
+  try {
+    console.log(tmpMessageList);
+    const { body, status } = await chat(tmpMessageList.value, getAPIKey());
+    if (body) {
+      const reader = body.getReader();
+      // await readStream(reader, status);
+      await readStream2Question(reader, status);
+    }
+  } catch (error: any) {
+    appendLastMessageContent(error);
+  } finally {
+    console.log("appendQuestionInfo res:" + questionInfo);
+    // 进行转换
+    globleQuestion.value = JSON.parse(questionInfo);
+  }
+};
+
+const nextQuestion_shortAnswer = async () => {
+  console.log("next question");
+  seeParse.value = false;
+  questionInfo = "";
+  accumulateQuestion += globleQuestion.value.question;
+  console.log("累加器：" + accumulateQuestion);
+  const tmpMessageList = ref<ChatMessage[]>([
+    {
+      role: "system",
+      content: `你是一个备考专家，需要为用户提供出问答题的服务，并排除用###符号分割的题干。
+          每个题目需要有以下几个要素：
+          1. 题干；
+          2. 提示；
+          3. 答案，50字以上，不超过200个词；
+          4. 参考资料；
+          以JSON格式提供你的输出，包含以下键：question(题干)，clue(提示)，answer(答案)，reference(参考资料)
+
+          举例输出JSON 如下：
+          {
+            "question": "为什么HTTP握手是3次而不是2次或4次？",
+            "clue"": "也许这样更可靠，也许这样能减少浪费，",
+            "answer": "三次握手之所以需要三次而不仅两次,主要是为了在连接建立时解决潜在的重复包和 ACK 丢失问题,这保证了 TCP 连接更加可靠。如果只有两次握手,那么客户端发送的 SYN 包有可能因为网络原因重复到达服务器端,服务器端会认为这是两次不同的连接请求,并分别发送 ACK 包进行确认,这会导致连接状态混乱。客户端需要确认服务器是否接收到其发送的 ACK 包。在两次握手中,服务器端发送 SYN/ACK 包后就开始发送数据包,而客户端此时还不知道服务器是否正确接收到其返回的 ACK 包。如果这个 ACK 包在网络中丢失,服务器仍然发送数据包,但客户端无法理解这些数据包,从而导致连接混乱。",
+            "reference": "《计算机网络》，https://mp.weixin.qq.com/s/QxY2Y8BhGTaGgOG1dyRuFg",
+          }`,
+    },
+    {
+      role: "user",
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `排除 ###` +
         accumulateQuestion +
         `###`,
     },
