@@ -35,12 +35,18 @@
         >点击跳转</a
       ><br />
       <a-image
-        :width="300"
+        :width="291"
+        :height="300"
         :src="`ChatTests_user_group_wechat.png`"
         style="border: 10px"
       >
       </a-image>
-      <a-image :width="300" :src="`Amy_wechat.png`" style="border: 10px">
+      <a-image
+        :width="300"
+        :height="300"
+        :src="`Amy_wechat.png`"
+        style="border: 10px"
+      >
       </a-image>
     </div>
   </a-modal>
