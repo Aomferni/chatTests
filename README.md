@@ -37,7 +37,7 @@ https://x3dsk4-5173.csb.app/#/
 ![preview](img/preview.gif)
 
 内测交流群见：
-![image](public/ChatTests_user_group_wechat.png)
+![image](public/内测交流群二维码.jpeg)
 
 对投入项目后续优化可带自我介绍戳：
 ![image](public/Amy_wechat.png)
