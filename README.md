@@ -36,10 +36,7 @@ https://x3dsk4-5173.csb.app/#/
 
 ![preview](img/preview.gif)
 
-内测交流群见：
-![image](public/内测交流群二维码.jpeg)
-
-对投入项目后续优化可带自我介绍戳：
+对进入内测交流群可戳：
 ![image](public/Amy_wechat.png)
 
 ## ChatTest 项目愿景
