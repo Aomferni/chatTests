@@ -8,8 +8,8 @@
   "exclude": [
     "src/**/*.html",
   ],
-  "allowJs": true,
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
