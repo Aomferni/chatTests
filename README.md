@@ -49,7 +49,7 @@ https://x3dsk4-5173.csb.app/#/
 
 ## 自部署指南
 推荐直接fork到自己的仓库，使用codeSandBox进行自动部署。
-
+只需要运行 `npm install` 和 `npm run dev`即可
 
 ## 许可证
 

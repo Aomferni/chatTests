@@ -4,7 +4,7 @@ export async function chat(messageList: ChatMessage[], apiKey: string) {
   try {
     const typeFromStorage = localStorage.getItem("type") ?? "zaiwen";
     if (typeFromStorage === "zaiwen") {
-      const result = await fetch("https://www.13042332817.top/message", {
+      const result = await fetch("https://www.gaosijiaoyu.cn/message", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
