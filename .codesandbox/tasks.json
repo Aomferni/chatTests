@@ -19,43 +19,35 @@
     },
     "build": {
       "name": "build",
-      "command": "yarn build",
-      "runAtStart": false
+      "command": "yarn build"
     },
     "preview": {
       "name": "preview",
-      "command": "yarn preview",
-      "runAtStart": false
+      "command": "yarn preview"
     },
     "build-only": {
       "name": "build-only",
-      "command": "yarn build-only",
-      "runAtStart": false
+      "command": "yarn build-only"
     },
     "type-check": {
       "name": "type-check",
-      "command": "yarn type-check",
-      "runAtStart": false
+      "command": "yarn type-check"
     },
     "e:dev": {
       "name": "e:dev",
-      "command": "yarn e:dev",
-      "runAtStart": false
+      "command": "yarn e:dev"
     },
     "e:build": {
       "name": "e:build",
-      "command": "yarn e:build",
-      "runAtStart": false
+      "command": "yarn e:build"
     },
     "ne:dev": {
       "name": "ne:dev",
-      "command": "yarn ne:dev",
-      "runAtStart": false
+      "command": "yarn ne:dev"
     },
     "ne:build": {
       "name": "ne:build",
-      "command": "yarn ne:build",
-      "runAtStart": false
+      "command": "yarn ne:build"
     }
   }
 }

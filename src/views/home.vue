@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-model:visible="showTips"
-    title="~ 欢迎回来 💡 ChatTests ~"
+    title="   欢迎来到北京大学智能图书馆-智能备考区"
     :footer="null"
     width="1000px"
   >
@@ -13,13 +13,20 @@
     ></iframe>
   </a-modal>
   <a-layout>
-    <a-layout-header style="color: #fff"> chatTests(aka.AI备考助手) - by AIGeniusHackers </a-layout-header>
-    <a-layout-content style="background: #fff; padding: 24px; margin: 24px; minheight: 100%; height: 80vh">
+    <a-layout-header style="color: #fff">
+      chatTests(aka.AI备考助手) - by AIGeniusHackers
+    </a-layout-header>
+    <a-layout-content
+      style="
+        background: #fff;
+        padding: 24px;
+        margin: 24px;
+        minheight: 100%;
+        height: 80vh;
+      "
+    >
       <a-collapse>
-        <a-collapse-panel
-          key="1"
-          header="设置"
-        >
+        <a-collapse-panel key="1" header="设置">
           <div class="flex">
             <input
               class="input"
@@ -28,35 +35,26 @@
               v-model="apiKey"
               @keydown.enter="save()"
             />
-            <a-button
-              type="primary"
-              size="large"
-              @click="save()"
-            >
+            <a-button type="primary" size="large" @click="save()">
               保存
             </a-button>
           </div>
-          <a-radio-group
-            v-model:value="type"
-            @change="changeType"
-          >
+          <a-radio-group v-model:value="type" @change="changeType">
             <a-radio-button value="zaiwen">在问</a-radio-button>
             <a-radio-button value="OpenAI">OpenAI</a-radio-button>
           </a-radio-group>
         </a-collapse-panel>
       </a-collapse>
       <a-row>
-        <a-col
-          :xs="{ span: 24 }"
-          :lg="{ span: 10 }"
-        >
+        <a-col :xs="{ span: 24 }" :lg="{ span: 10 }">
           <div style="overflow-y: scroll; height: 75vh">
-            <div style="display: block; font-size: 30px; font-style: oblique">No.{{ qNum }}</div>
-            <div style="display: block; font-size: 20px">题目：{{ globleQuestion.question }}</div>
-            <a-radio-group
-              v-model:value="value"
-              @change="optionsChange"
-            >
+            <div style="display: block; font-size: 30px; font-style: oblique">
+              No.{{ qNum }}
+            </div>
+            <div style="display: block; font-size: 20px">
+              题目：{{ globleQuestion.question }}
+            </div>
+            <a-radio-group v-model:value="value" @change="optionsChange">
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="1"
@@ -80,17 +78,11 @@
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
               <a-space>
-                <a-button
-                  type="primary"
-                  size="large"
-                  @click="seeTheParse"
+                <a-button type="primary" size="large" @click="seeTheParse"
                   >提交答案</a-button
                 >
                 <!-- :disabled="true" -->
-                <a-button
-                  type="primary"
-                  size="large"
-                  @click="updateQuestion"
+                <a-button type="primary" size="large" @click="updateQuestion"
                   >继续出题</a-button
                 >
               </a-space>
@@ -102,10 +94,7 @@
                 style="width: 80%"
               >
                 <template #extra>
-                  <a-button
-                    type="primary"
-                    size="small"
-                    @click="closeParse"
+                  <a-button type="primary" size="small" @click="closeParse"
                     >关闭</a-button
                   >
                 </template>
@@ -168,21 +157,27 @@
           </div>
 
           <div style="overflow-y: scroll; height: 30vh">
-            <div
-              id="vditor"
-              style="margin-top: 30px"
-            />
+            <div id="vditor" style="margin-top: 30px" />
           </div>
         </a-col>
       </a-row>
     </a-layout-content>
-    <a-layout-footer> 本网站由AIGeniusHackers小组(DataWhale5月ChatGPT应用)，2周时间肝出(2023.5.30~2023.6.13) </a-layout-footer>
+    <a-layout-footer> </a-layout-footer>
   </a-layout>
 </template>
 
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
-import { ref, watch, nextTick, onMounted, reactive, computed, vShow, h } from "vue";
+import {
+  ref,
+  watch,
+  nextTick,
+  onMounted,
+  reactive,
+  computed,
+  vShow,
+  h,
+} from "vue";
 import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
@@ -200,7 +195,8 @@ const roleAlias = { user: "ME", assistant: "ChatTests", system: "System" };
 const messageList = ref<ChatMessage[]>([
   {
     role: "system",
-    content: "你是 一个能快速出题帮助用户通过不断刷题通过考试的大语言模型助手，需要对用户的疑问进行解答，并需要根据用户的需要创作相应的题目并给出解析。",
+    content:
+      "你是 一个能快速出题帮助用户通过不断刷题通过考试的大语言模型助手，需要对用户的疑问进行解答，并需要根据用户的需要创作相应的题目并给出解析。",
   },
   {
     role: "assistant",
@@ -256,7 +252,8 @@ var accumulateQuestion = "";
 // 返回出题信息
 var questionInfo = "";
 var learningScope = "软件设计师";
-var learningArea = "面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空";
+var learningArea =
+  "面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空";
 
 const qNum = ref(1);
 
@@ -347,7 +344,10 @@ const nextQuestion_old = async () => {
     },
     {
       role: "user",
-      content: `请随机给出一个软件设计师相关的题目，范围是面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空。排除 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个软件设计师相关的题目，范围是面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空。排除 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -399,7 +399,14 @@ const nextQuestion = async () => {
     },
     {
       role: "user",
-      content: `请随机给出一个` + learningScope + `的题目，范围是` + learningArea + `。排除已经出过的题目 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `。排除已经出过的题目 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -446,7 +453,14 @@ const nextQuestion_shortAnswer = async () => {
     },
     {
       role: "user",
-      content: `请随机给出一个` + learningScope + `的题目，范围是` + learningArea + `排除 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `排除 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -488,7 +502,10 @@ const sendChatMessage = async (content: string = messageContent.value) => {
   }
 };
 
-const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, status: number) => {
+const readStream = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  status: number,
+) => {
   let partialLine = "";
 
   while (true) {
@@ -524,7 +541,10 @@ const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, statu
         if (line === "data: [DONE]") return; //
 
         const json = JSON.parse(line.substring(6)); // start with "data: "
-        const content = status === 200 ? json.choices[0].delta.content ?? "" : json.error.message;
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
         appendLastMessageContent(content);
         scrollToBottom();
       }
@@ -533,7 +553,10 @@ const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, statu
   console.log("partialLine:" + partialLine);
 };
 
-const readStream2Question = async (reader: ReadableStreamDefaultReader<Uint8Array>, status: number) => {
+const readStream2Question = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  status: number,
+) => {
   let partialLine = "";
   var resp = "";
 
@@ -570,7 +593,10 @@ const readStream2Question = async (reader: ReadableStreamDefaultReader<Uint8Arra
         if (line === "data: [DONE]") return; //
 
         const json = JSON.parse(line.substring(6)); // start with "data: "
-        const content = status === 200 ? json.choices[0].delta.content ?? "" : json.error.message;
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
         //appendLastMessageContent(content);
         // appendQuestionInfo(content)
         questionInfo += content;
@@ -594,7 +620,8 @@ const tryRenderPartialQuestion = (questionInfo: string) => {
   }
 };
 
-const appendLastMessageContent = (content: string) => (messageList.value[messageList.value.length - 1].content += content);
+const appendLastMessageContent = (content: string) =>
+  (messageList.value[messageList.value.length - 1].content += content);
 
 const save = () => {
   if (saveAPIKey(apiKey.value.trim())) {
@@ -610,7 +637,9 @@ const getSecretKey = () => "lianginx";
 
 const saveAPIKey = (apiKey: string) => {
   if (apiKey.slice(0, 3) !== "sk-" || apiKey.length !== 51) {
-    alert("API Key 错误，请检查后重新输入！\n如无key可尝试 在问(zaiwen.top) 渠道");
+    alert(
+      "API Key 错误，请检查后重新输入！\n如无key可尝试 在问(zaiwen.top) 渠道",
+    );
     return false;
   }
   const aesAPIKey = cryptoJS.AES.encrypt(apiKey, getSecretKey()).toString();
@@ -620,7 +649,10 @@ const saveAPIKey = (apiKey: string) => {
 
 const getAPIKey = () => {
   const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  const apiKeyFromStorage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(cryptoJS.enc.Utf8);
+  const apiKeyFromStorage = cryptoJS.AES.decrypt(
+    aesAPIKey,
+    getSecretKey(),
+  ).toString(cryptoJS.enc.Utf8);
   apiKey.value = apiKeyFromStorage;
   const typeFromStorage = localStorage.getItem("type") ?? "zaiwen";
   type.value = typeFromStorage;
@@ -650,7 +682,10 @@ const exportNote = () => {
 
 <style scoped>
 pre {
-  font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei,
-    "WenQuanYi Zen Hei Sharp", sans-serif;
+  font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica,
+    "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN",
+    "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti",
+    SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }
 </style>
