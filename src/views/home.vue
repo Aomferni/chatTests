@@ -14,7 +14,7 @@
   </a-modal>
   <a-layout>
     <a-layout-header style="color: #fff">
-      chatTests(aka.AI备考助手) - by AIGeniusHackers
+      北京大学智能图书馆-AI备考助手
     </a-layout-header>
     <a-layout-content
       style="
