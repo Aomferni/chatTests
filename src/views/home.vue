@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-model:visible="showTips"
-    title="~ 欢迎回来 💡 ChatTests ~"
+    title="   欢迎来到北京大学智能图书馆-智能备考区"
     :footer="null"
     width="1000px"
   >
@@ -13,13 +13,20 @@
     ></iframe>
   </a-modal>
   <a-layout>
-    <a-layout-header style="color: #fff"> chatTests(aka.AI备考助手) - by AIGeniusHackers </a-layout-header>
-    <a-layout-content style="background: #fff; padding: 24px; margin: 24px; minheight: 100%; height: 80vh">
+    <a-layout-header style="color: #fff">
+      北京大学智能图书馆-AI备考助手
+    </a-layout-header>
+    <a-layout-content
+      style="
+        background: #fff;
+        padding: 24px;
+        margin: 24px;
+        minheight: 100%;
+        height: 80vh;
+      "
+    >
       <a-collapse>
-        <a-collapse-panel
-          key="1"
-          header="设置"
-        >
+        <a-collapse-panel key="1" header="设置">
           <div class="flex">
             <input
               class="input"
@@ -28,35 +35,26 @@
               v-model="apiKey"
               @keydown.enter="save()"
             />
-            <a-button
-              type="primary"
-              size="large"
-              @click="save()"
-            >
+            <a-button type="primary" size="large" @click="save()">
               保存
             </a-button>
           </div>
-          <a-radio-group
-            v-model:value="type"
-            @change="changeType"
-          >
+          <a-radio-group v-model:value="type" @change="changeType">
             <a-radio-button value="zaiwen">在问</a-radio-button>
             <a-radio-button value="OpenAI">OpenAI</a-radio-button>
           </a-radio-group>
         </a-collapse-panel>
       </a-collapse>
       <a-row>
-        <a-col
-          :xs="{ span: 24 }"
-          :lg="{ span: 10 }"
-        >
+        <a-col :xs="{ span: 24 }" :lg="{ span: 10 }">
           <div style="overflow-y: scroll; height: 75vh">
-            <div style="display: block; font-size: 30px; font-style: oblique">No.{{ qNum }}</div>
-            <div style="display: block; font-size: 20px">题目：{{ globleQuestion.question }}</div>
-            <a-radio-group
-              v-model:value="value"
-              @change="optionsChange"
-            >
+            <div style="display: block; font-size: 30px; font-style: oblique">
+              No.{{ qNum }}
+            </div>
+            <div style="display: block; font-size: 20px">
+              题目：{{ globleQuestion.question }}
+            </div>
+            <a-radio-group v-model:value="value" @change="optionsChange">
               <a-radio
                 style="display: block; font-size: 17px; margin-top: 10px"
                 :value="1"
@@ -80,17 +78,11 @@
             </a-radio-group>
             <div style="display: block; margin-top: 20px">
               <a-space>
-                <a-button
-                  type="primary"
-                  size="large"
-                  @click="seeTheParse"
+                <a-button type="primary" size="large" @click="seeTheParse"
                   >提交答案</a-button
                 >
                 <!-- :disabled="true" -->
-                <a-button
-                  type="primary"
-                  size="large"
-                  @click="updateQuestion"
+                <a-button type="primary" size="large" @click="updateQuestion"
                   >继续出题</a-button
                 >
               </a-space>
@@ -102,10 +94,7 @@
                 style="width: 80%"
               >
                 <template #extra>
-                  <a-button
-                    type="primary"
-                    size="small"
-                    @click="closeParse"
+                  <a-button type="primary" size="small" @click="closeParse"
                     >关闭</a-button
                   >
                 </template>
@@ -168,21 +157,27 @@
           </div>
 
           <div style="overflow-y: scroll; height: 30vh">
-            <div
-              id="vditor"
-              style="margin-top: 30px"
-            />
+            <div id="vditor" style="margin-top: 30px" />
           </div>
         </a-col>
       </a-row>
     </a-layout-content>
-    <a-layout-footer> 本网站由AIGeniusHackers小组(DataWhale5月ChatGPT应用)，2周时间肝出(2023.5.30~2023.6.13) </a-layout-footer>
+    <a-layout-footer> </a-layout-footer>
   </a-layout>
 </template>
 
 <script setup lang="ts">
 import type { ChatMessage } from "@/types";
-import { ref, watch, nextTick, onMounted, reactive, computed, vShow, h } from "vue";
+import {
+  ref,
+  watch,
+  nextTick,
+  onMounted,
+  reactive,
+  computed,
+  vShow,
+  h,
+} from "vue";
 import { chat } from "@/libs/gpt";
 import cryptoJS from "crypto-js";
 import Loding from "@/components/Loding.vue";
@@ -200,7 +195,8 @@ const roleAlias = { user: "ME", assistant: "ChatTests", system: "System" };
 const messageList = ref<ChatMessage[]>([
   {
     role: "system",
-    content: "你是 一个能快速出题帮助用户通过不断刷题通过考试的大语言模型助手，需要对用户的疑问进行解答，并需要根据用户的需要创作相应的题目并给出解析。",
+    content:
+      "你是 一个能快速出题帮助用户通过不断刷题通过考试的大语言模型助手，需要对用户的疑问进行解答，并需要根据用户的需要创作相应的题目并给出解析。",
   },
   {
     role: "assistant",
@@ -242,21 +238,21 @@ const changeType = (value: any) => {
 };
 
 const globleQuestion = ref({
-  question: "以下关于好的软件设计原则的叙述中，不正确的是（）。",
-  A: "模块化",
-  B: "集中化",
-  C: "提高模块独立性",
-  D: "提高抽象层次",
+  question: "以下关于数据库模式设计的叙述中，不正确的是（）。",
+  A: "遵循范式化设计规范",
+  B: "保持冗余数据以提高查询效率",
+  C: "优化查询性能",
+  D: "合理选择适当的索引",
   rightIndex: 2,
   analyze:
-    "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。",
+    "数据库模式设计是指根据应用需求设计数据库的结构和组织方式。在数据库模式设计中，应当遵循范式化设计规范，即尽量避免数据冗余，确保数据的唯一性和一致性。冗余数据可能导致数据更新异常和一致性维护困难。同时，优化查询性能也是数据库设计的重要目标，包括合理设计表结构、使用合适的数据类型、优化查询语句等。合理选择适当的索引是提高数据库查询效率的重要手段，可以加快数据检索速度。然而，保持冗余数据以提高查询效率是错误的观念，因为冗余数据会增加数据存储成本，并且增加了数据更新时的复杂性。",
 });
 // 题目标题累加器
 var accumulateQuestion = "";
 // 返回出题信息
 var questionInfo = "";
-var learningScope = "软件设计师";
-var learningArea = "面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空";
+var learningScope = "数据库系统专家";
+var learningArea = "";
 
 const qNum = ref(1);
 
@@ -269,13 +265,13 @@ const updateQuestion = () => {
 };
 
 const jsonContent = `{
-  "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
-  "A": "模块化",
-  "B": "集中化",
-  "C": "提高模块独立性",
-  "D": "提高抽象层次",
+  "question": "以下关于数据库模式设计的叙述中，不正确的是（）。",
+  "A": "遵循范式化设计规范",
+  "B": "保持冗余数据以提高查询效率",
+  "C": "优化查询性",
+  "D": "合理选择适当的索引",
   "rightIndex": 2,
-  "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
+  "analyze": "数据库模式设计是指根据应用需求设计数据库的结构和组织方式。在数据库模式设计中，应当遵循范式化设计规范，即尽量避免数据冗余，确保数据的唯一性和一致性。冗余数据可能导致数据更新异常和一致性维护困难。同时，优化查询性能也是数据库设计的重要目标，包括合理设计表结构、使用合适的数据类型、优化查询语句等。合理选择适当的索引是提高数据库查询效率的重要手段，可以加快数据检索速度。然而，保持冗余数据以提高查询效率是错误的观念，因为冗余数据会增加数据存储成本，并且增加了数据更新时的复杂性。"
 }`;
 
 const seeTheParse = () => {
@@ -336,18 +332,21 @@ const nextQuestion_old = async () => {
 
           举例输出JSON 如下：
           {
-            "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
-            "A": "模块化",
-            "B": "集中化",
-            "C": "提高模块独立性",
-            "D": "提高抽象层次",
+            "question": "以下关于数据库模式设计的叙述中，不正确的是（）。",
+            "A": "遵循范式化设计规范",
+            "B": "保持冗余数据以提高查询效率",
+            "C": "优化查询性能",
+            "D": "合理选择适当的索引",
             "rightIndex": 2,
-            "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
+            "analyze": "数据库模式设计是指根据应用需求设计数据库的结构和组织方式。在数据库模式设计中，应当遵循范式化设计规范，即尽量避免数据冗余，确保数据的唯一性和一致性。冗余数据可能导致数据更新异常和一致性维护困难。同时，优化查询性能也是数据库设计的重要目标，包括合理设计表结构、使用合适的数据类型、优化查询语句等。合理选择适当的索引是提高数据库查询效率的重要手段，可以加快数据检索速度。然而，保持冗余数据以提高查询效率是错误的观念，因为冗余数据会增加数据存储成本，并且增加了数据更新时的复杂性。"
           }`,
     },
     {
       role: "user",
-      content: `请随机给出一个软件设计师相关的题目，范围是面向对象技术、软件工程、项目管理、数据结构和算法基础、计算机体系结构、信息安全&网络、程序设计语言&编译器、操作系统、数据库系统知识产权与标准化、相关领域英语材料完型填空。排除 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个数据库系统相关的题目，范围是数据库系统、关系模型、SQL语言、数据模型、DBMS、范式化设计、索引、事务管理、并发控制、数据库安全、数据备份与恢复、数据仓库、数据挖掘、NoSQL数据库、大数据技术、数据库性能优化、数据库连接、数据库设计、数据库应用开发、数据库监控、容量规划、数据加密、数据一致性、分布式数据库、数据查询优化、数据存储与检索、数据库索引结构、关系代数、关系操作、关系数据库查询语言、关系数据库管理系统、数据库表、数据库视图、数据库触发器、数据库约束、数据库连接池、数据库连接字符串、数据库连接池配置、数据库连接池管理、数据库连接池性能优化、数据库连接池扩展、数据库连接池故障处理,排除 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -388,18 +387,25 @@ const nextQuestion = async () => {
 
           举例输出JSON 如下：
           {
-            "question": "以下关于好的软件设计原则的叙述中，不正确的是（）。",
-            "A": "模块化",
-            "B": "集中化",
-            "C": "提高模块独立性",
-            "D": "提高抽象层次",
+            "question": "以下关于数据库模式设计的叙述中，不正确的是（）。",
+            "A": "遵循范式化设计规范",
+            "B": "保持冗余数据以提高查询效率",
+            "C": "优化查询性能",
+            "D": "合理选择适当的索引",
             "rightIndex": 2,
-            "analyze": "好的软件设计原则是指为了提高软件可维护性、可读性、可扩展性、可重用性等而遵循的一些设计原则或思想。其中，常见的设计原则包括模块化、提高模块独立性、提高抽象层次等。模块化是指将整个软件系统划分为若干个功能模块，每个模块具有完整的功能结构，便于开发和维护。提高模块独立性则是指让每个模块尽可能独立，降低模块之间的耦合度，从而提高系统的可扩展性和可维护性。提高抽象层次则是指使用抽象的设计方式，将问题抽象成更加通用、高层次的概念或模块，使得系统变得更加灵活和可扩展。而集中化则不是一个好的软件设计原则。过于集中的设计可能会导致系统的单点故障、性能瓶颈等问题，降低了系统的可靠性和可扩展性。"
+            "analyze": "数据库模式设计是指根据应用需求设计数据库的结构和组织方式。在数据库模式设计中，应当遵循范式化设计规范，即尽量避免数据冗余，确保数据的唯一性和一致性。冗余数据可能导致数据更新异常和一致性维护困难。同时，优化查询性能也是数据库设计的重要目标，包括合理设计表结构、使用合适的数据类型、优化查询语句等。合理选择适当的索引是提高数据库查询效率的重要手段，可以加快数据检索速度。然而，保持冗余数据以提高查询效率是错误的观念，因为冗余数据会增加数据存储成本，并且增加了数据更新时的复杂性。"
           }`,
     },
     {
       role: "user",
-      content: `请随机给出一个` + learningScope + `的题目，范围是` + learningArea + `。排除已经出过的题目 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `。排除已经出过的题目 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -446,7 +452,14 @@ const nextQuestion_shortAnswer = async () => {
     },
     {
       role: "user",
-      content: `请随机给出一个` + learningScope + `的题目，范围是` + learningArea + `排除 ###` + accumulateQuestion + `###`,
+      content:
+        `请随机给出一个` +
+        learningScope +
+        `的题目，范围是` +
+        learningArea +
+        `排除 ###` +
+        accumulateQuestion +
+        `###`,
     },
   ]);
   try {
@@ -488,7 +501,10 @@ const sendChatMessage = async (content: string = messageContent.value) => {
   }
 };
 
-const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, status: number) => {
+const readStream = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  status: number,
+) => {
   let partialLine = "";
 
   while (true) {
@@ -524,7 +540,10 @@ const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, statu
         if (line === "data: [DONE]") return; //
 
         const json = JSON.parse(line.substring(6)); // start with "data: "
-        const content = status === 200 ? json.choices[0].delta.content ?? "" : json.error.message;
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
         appendLastMessageContent(content);
         scrollToBottom();
       }
@@ -533,7 +552,10 @@ const readStream = async (reader: ReadableStreamDefaultReader<Uint8Array>, statu
   console.log("partialLine:" + partialLine);
 };
 
-const readStream2Question = async (reader: ReadableStreamDefaultReader<Uint8Array>, status: number) => {
+const readStream2Question = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  status: number,
+) => {
   let partialLine = "";
   var resp = "";
 
@@ -570,7 +592,10 @@ const readStream2Question = async (reader: ReadableStreamDefaultReader<Uint8Arra
         if (line === "data: [DONE]") return; //
 
         const json = JSON.parse(line.substring(6)); // start with "data: "
-        const content = status === 200 ? json.choices[0].delta.content ?? "" : json.error.message;
+        const content =
+          status === 200
+            ? json.choices[0].delta.content ?? ""
+            : json.error.message;
         //appendLastMessageContent(content);
         // appendQuestionInfo(content)
         questionInfo += content;
@@ -594,7 +619,8 @@ const tryRenderPartialQuestion = (questionInfo: string) => {
   }
 };
 
-const appendLastMessageContent = (content: string) => (messageList.value[messageList.value.length - 1].content += content);
+const appendLastMessageContent = (content: string) =>
+  (messageList.value[messageList.value.length - 1].content += content);
 
 const save = () => {
   if (saveAPIKey(apiKey.value.trim())) {
@@ -610,7 +636,9 @@ const getSecretKey = () => "lianginx";
 
 const saveAPIKey = (apiKey: string) => {
   if (apiKey.slice(0, 3) !== "sk-" || apiKey.length !== 51) {
-    alert("API Key 错误，请检查后重新输入！\n如无key可尝试 在问(zaiwen.top) 渠道");
+    alert(
+      "API Key 错误，请检查后重新输入！\n如无key可尝试 在问(zaiwen.top) 渠道",
+    );
     return false;
   }
   const aesAPIKey = cryptoJS.AES.encrypt(apiKey, getSecretKey()).toString();
@@ -620,7 +648,10 @@ const saveAPIKey = (apiKey: string) => {
 
 const getAPIKey = () => {
   const aesAPIKey = localStorage.getItem("apiKey") ?? "";
-  const apiKeyFromStorage = cryptoJS.AES.decrypt(aesAPIKey, getSecretKey()).toString(cryptoJS.enc.Utf8);
+  const apiKeyFromStorage = cryptoJS.AES.decrypt(
+    aesAPIKey,
+    getSecretKey(),
+  ).toString(cryptoJS.enc.Utf8);
   apiKey.value = apiKeyFromStorage;
   const typeFromStorage = localStorage.getItem("type") ?? "zaiwen";
   type.value = typeFromStorage;
@@ -650,7 +681,10 @@ const exportNote = () => {
 
 <style scoped>
 pre {
-  font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei,
-    "WenQuanYi Zen Hei Sharp", sans-serif;
+  font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica,
+    "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN",
+    "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti",
+    SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }
 </style>
